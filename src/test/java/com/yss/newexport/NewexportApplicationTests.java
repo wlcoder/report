@@ -8,6 +8,7 @@ class NewexportApplicationTests {
 
 	@Test
 	void contextLoads() {
+		System.out.println("hello git");
 	}
 
 }
