@@ -1,0 +1,1163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yss.newexport.dao.Local.IprocessDataDao">
+    <!--估值表处理 -->
+    <select id="queryEvalReport" parameterType="com.yss.newexport.Entity.EvalReportVO"
+            resultType="com.yss.newexport.Entity.EvalReportVO">
+        SELECT
+        ID as  id,
+        Evl_Dt as evlDt,
+        Ptf_Id as ptfId,
+        Coa_Id as coaId,
+        Ccy_Cd as ccyCd,
+        Coa_Name as coaName,
+        Secu_Cd as secuCd,
+        Exchange_Cd as exchangeCd,
+        Secu_Qty as secuQty,
+        Unit_Buy_Cost as unitBuyCost,
+        Cost_Occy as costOccy,
+        Cost_Dccy as costDccy,
+        Cost_Nav_Ratio_Occy as costNavRatioOccy,
+        Cost_Nav_Ratio_Dccy as costNavRatioDccy,
+        Evl_Prc as evlPrc,
+        Mkt_Evl_Method_Cd as mktEvlMethodCd,
+        Mkt_Val_Occy as mktValOccy,
+        Mkt_Val_Dccy as mktValDccy,
+        Mkt_Nav_Ratio_Occy as mktNavRatioOccy,
+        Mkt_Nav_Ratio_Dccy as mktNavRatioDccy,
+        Evl_Aprct_Occy as evlAprctOccy,
+        Evl_Aprct_Dccy as evlAprctDccy,
+        Evl_Aprct_Nav_Ratio_Occy as evlAprctNavRatioOccy,
+        Evl_Aprct_Coa_Id as evlAprctCoaId,
+        Base_Ex_Rate as baseExRate,
+        Ptf_Ex_Rate as ptfExRate,
+        Convert_Profit_Loss as convertProfitLoss,
+        Rights_Info as rightsInfo,
+        Mkt_Desc as mktDesc,
+        Origin_Secu_Cd as originSecuCd
+        from
+           T04_FIN_EVL
+        where
+        Evl_Dt = #{evlDt}
+        and
+        Ptf_Id = 'Z00295'
+        order by Coa_Id
+    </select>
+
+    <!--估值表修改-->
+    <update id="updateEvalReport" parameterType="java.util.List">
+        update T04_FIN_EVL
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="Evl_Dt =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.evlDt}
+                </foreach>
+            </trim>
+            <trim prefix="Ptf_Id =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.ptfId}
+                </foreach>
+            </trim>
+            <trim prefix="Coa_Id =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.coaId}
+                </foreach>
+            </trim>
+            <trim prefix="Ccy_Cd =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.ccyCd}
+                </foreach>
+            </trim>
+            <trim prefix="Coa_Name =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.coaName}
+                </foreach>
+            </trim>
+            <trim prefix="Secu_Cd =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.secuCd}
+                </foreach>
+            </trim>
+            <trim prefix="Secu_Qty =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.secuQty}
+                </foreach>
+            </trim>
+            <trim prefix="Unit_Buy_Cost =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.unitBuyCost}
+                </foreach>
+            </trim>
+            <trim prefix="Cost_Occy =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.costOccy}
+                </foreach>
+            </trim>
+            <trim prefix="Cost_Dccy =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.costDccy}
+                </foreach>
+            </trim>
+            <trim prefix="Cost_Nav_Ratio_Occy =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.costNavRatioOccy}
+                </foreach>
+            </trim>
+            <trim prefix="Cost_Nav_Ratio_Dccy =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.costNavRatioDccy}
+                </foreach>
+            </trim>
+            <trim prefix="Evl_Prc =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.evlPrc}
+                </foreach>
+            </trim>
+            <trim prefix="Mkt_Evl_Method_Cd =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.mktEvlMethodCd}
+                </foreach>
+            </trim>
+            <trim prefix="Mkt_Val_Occy =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.mktValOccy}
+                </foreach>
+            </trim>
+            <trim prefix="Evl_Aprct_Occy =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.evlAprctOccy}
+                </foreach>
+            </trim>
+            <trim prefix="Evl_Aprct_Dccy =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.evlAprctDccy}
+                </foreach>
+            </trim>
+            <trim prefix="Evl_Aprct_Nav_Ratio_Occy =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.evlAprctNavRatioOccy}
+                </foreach>
+            </trim>
+            <trim prefix="Evl_Aprct_Coa_Id =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.evlAprctCoaId}
+                </foreach>
+            </trim>
+        </trim>
+        where Id in
+        <foreach collection="list" index="index" item="item"
+                 separator="," open="(" close=")">
+            #{item.id,jdbcType=INTEGER}
+        </foreach>
+    </update>
+
+    <!--估值表删除-->
+    <delete id="deleteEvalReport" parameterType="java.util.List">
+        delete from T04_FIN_EVL where Id in
+        <foreach collection="list" item="id" open="(" separator="," close=")">#{id}
+        </foreach>
+    </delete>
+
+    <!--科目表处理-->
+    <select id="queryCourseCode" parameterType="com.yss.newexport.Entity.CourseCodeReportVO"
+            resultType="com.yss.newexport.Entity.CourseCodeReportVO">
+        SELECT
+        ID as id,
+        Ptf_Id as ptfId,
+        Coa_Id as coaId,
+        Coa_Name as coaName,
+        Super_Coa_Id as superCoaId,
+        Coa_Lvl as coaLvl,
+        Dtl_Coa_Ind as dtlCoaInd,
+        Coa_Catg_Cd as coaCatgCd,
+        Coa_Attr as coaAttr,
+        Coa_Dir_Cd as coaDirCd,
+        Ccy_Cd as ccyCd,
+        Accting_Qty_Ind as acctingQtyInd,
+        Sum_Qty_Tfr_Ind as sumQtyTfrInd,
+        date_format(Open_Dt,'%Y-%m-%d') as openDt,
+        date_format(Close_Dt,'%Y-%m-%d') as closeDt,
+        Usable_Ind as usableInd,
+        Secu_Cd as secuCd,
+        Exchange_Cd as exchangeCd,
+        Inv_Type_Cd as invTypeCd,
+        En_Name as enName,
+        Assist_Accting_Cd as assistAcctingCd
+        from
+          T04_COA
+        where
+        Ptf_Id = #{ptfId}
+        order by Coa_Id
+    </select>
+
+    <!--科目表修改-->
+    <update id="updateCourseCode" parameterType="java.util.List">
+        update T04_COA
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="Ptf_Id =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.ptfId}
+                </foreach>
+            </trim>
+            <trim prefix="Coa_Id =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.coaId}
+                </foreach>
+            </trim>
+            <trim prefix="Coa_Name =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.coaName}
+                </foreach>
+            </trim>
+            <trim prefix="Super_Coa_Id =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.superCoaId}
+                </foreach>
+            </trim>
+            <trim prefix="Coa_Lvl =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.coaLvl}
+                </foreach>
+            </trim>
+            <trim prefix="Dtl_Coa_Ind =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.dtlCoaInd}
+                </foreach>
+            </trim>
+            <trim prefix="Coa_Catg_Cd =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.coaCatgCd}
+                </foreach>
+            </trim>
+            <trim prefix="Coa_Attr =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.coaAttr}
+                </foreach>
+            </trim>
+            <trim prefix="Open_Dt =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.openDt}
+                </foreach>
+            </trim>
+            <trim prefix="Close_Dt =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.closeDt}
+                </foreach>
+            </trim>
+        </trim>
+        where Id in
+        <foreach collection="list" index="index" item="item"
+                 separator="," open="(" close=")">
+            #{item.id,jdbcType=INTEGER}
+        </foreach>
+    </update>
+
+    <!--科目表删除-->
+    <delete id="deleteCourseCode" parameterType="java.util.List">
+        delete from T04_COA where Id in
+        <foreach collection="list" item="id" open="(" separator="," close=")">#{id}
+        </foreach>
+    </delete>
+
+    <!--科目余额表查询-->
+    <select id="queryCourseBalance" parameterType="com.yss.newexport.Entity.CourseBalanceVO"
+            resultType="com.yss.newexport.Entity.CourseBalanceVO">
+        SELECT
+        Id as id,
+        Accting_Peroid as acctingPeroid,
+        Ptf_Id as ptfId,
+        Coa_Id as coaId,
+        Ccy_Cd as ccyCd,
+        init_Bal_Occy as initBalOccy,
+        Curr_Term_Db_Occurnc_Occy as currTermDbOccurncOccy,
+        Curr_Term_Cr_Occurnc_Occy as currTermCrOccurncOccy,
+        Aggr_Db_Occurnc_Occy as aggrDbOccurncOccy,
+        Aggr_Cr_Occurnc_Occy as aggrCrOccurncOccy,
+        Teminal_Bal_Occy as teminalBalOccy,
+        init_Qty as initQty,
+        Curr_Term_Db_Occur_Qty as currTermDbOccurQty,
+        Curr_Term_Cr_Occur_Qty as currTermCrOccurQty,
+        Aggr_Db_Occur_Qty as aggrDbOccurQty,
+        Aggr_Cr_Occur_Qty as aggrCrOccurQty,
+        Teminal_Qty as teminalQty,
+        init_Bal_Dccy as initBalDccy,
+        Curr_Term_Db_Occurnc_Dccy as currTermDbOccurncDccy,
+        Curr_Term_Cr_Occurnc_Dccy as currTermCrOccurncDccy,
+        Aggr_Db_Occurnc_Dccy as aggrDbOccurncDccy,
+        Aggr_Cr_Occurnc_Dccy as aggrCrOccurncDccy,
+        Teminal_Bal_Dccy as teminalBalDccy,
+        Assist_Accting_Cd as assistAcctingCd
+        from
+          T04_COA_GL_BAL
+        where
+         Ptf_Id = #{ptfId}
+        ORDER BY Coa_Id
+    </select>
+
+    <!--科目余额表修改-->
+    <update id="updateCourseBalance" parameterType="java.util.List">
+        update T04_COA_GL_BAL
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="Accting_Peroid =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.acctingPeroid}
+                </foreach>
+            </trim>
+            <trim prefix="Ptf_Id =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.ptfId}
+                </foreach>
+            </trim>
+            <trim prefix="Coa_Id =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.coaId}
+                </foreach>
+            </trim>
+            <trim prefix="Ccy_Cd =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.ccyCd}
+                </foreach>
+            </trim>
+            <trim prefix="init_Bal_Occy =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.initBalOccy}
+                </foreach>
+            </trim>
+            <trim prefix="Curr_Term_Db_Occurnc_Occy =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.currTermDbOccurncOccy}
+                </foreach>
+            </trim>
+            <trim prefix="Curr_Term_Cr_Occurnc_Occy =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.currTermCrOccurncOccy}
+                </foreach>
+            </trim>
+            <trim prefix="Aggr_Db_Occur_Qty =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.aggrDbOccurncOccy}
+                </foreach>
+            </trim>
+            <trim prefix="Aggr_Cr_Occurnc_Occy =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.aggrCrOccurncOccy}
+                </foreach>
+            </trim>
+            <trim prefix="Teminal_Bal_Occy =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.teminalBalOccy}
+                </foreach>
+            </trim>
+            <trim prefix="init_Qty =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.initQty}
+                </foreach>
+            </trim>
+            <trim prefix="Curr_Term_Db_Occur_Qty =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.currTermDbOccurQty}
+                </foreach>
+            </trim>
+            <trim prefix="Curr_Term_Db_Occur_Qty =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.currTermCrOccurncDccy}
+                </foreach>
+            </trim>
+            <trim prefix="Aggr_Db_Occurnc_Dccy =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.aggrDbOccurncDccy}
+                </foreach>
+            </trim>
+            <trim prefix="Curr_Term_Cr_Occurnc_Dccy =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.aggrCrOccurncDccy}
+                </foreach>
+            </trim>
+            <trim prefix="Teminal_Qty =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.teminalQty}
+                </foreach>
+            </trim>
+            <trim prefix="init_Bal_Dccy =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.initBalDccy}
+                </foreach>
+            </trim>
+            <trim prefix="Curr_Term_Db_Occurnc_Dccy =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.currTermDbOccurncDccy}
+                </foreach>
+            </trim>
+            <trim prefix="Aggr_Cr_Occurnc_Dccy =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.currTermCrOccurncDccy}
+                </foreach>
+            </trim>
+            <trim prefix="Aggr_Db_Occurnc_Dccy =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.aggrDbOccurncDccy}
+                </foreach>
+            </trim>
+            <trim prefix="Aggr_Cr_Occurnc_Dccy =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.aggrCrOccurncDccy}
+                </foreach>
+            </trim>
+            <trim prefix="Teminal_Bal_Dccy =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.teminalBalDccy}
+                </foreach>
+            </trim>
+        </trim>
+        where Id in
+        <foreach collection="list" index="index" item="item"
+                 separator="," open="(" close=")">
+            #{item.id,jdbcType=INTEGER}
+        </foreach>
+    </update>
+
+    <!--科目余额表删除-->
+    <delete id="deleteCourseBalance" parameterType="java.util.List">
+        delete from T04_COA_GL_BAL where Id in
+        <foreach collection="list" item="id" open="(" separator="," close=")">#{id}
+        </foreach>
+    </delete>
+    <!--银行存款业务查询-->
+    <select id="queryBankDeposit" parameterType="com.yss.newexport.Entity.BankDepositReportVO"
+            resultType="com.yss.newexport.Entity.BankDepositReportVO">
+        SELECT
+        Id as  id,
+        Bargain_Id as bargainId,
+        Ptf_Id as ptfId,
+        Dep_Recpt_Id as depRecptId,
+        date_format(Start_Dt,'%Y-%m-%d') as startDt,
+        date_format(End_Dt,'%Y-%m-%d') as endDt,
+        Dep_Biz_Type_Cd as depBizTypeCd,
+        With_In_Adv_Ind as withInAdvInd,
+        Saving_Dep_Acct_Id as savingDepAcctId,
+        Regular_Dep_Acct_Id as regularDepAcctId,
+        Int_Db_Acct_Id as intDbAcctId,
+        Int_Cr_Acct_Id as intCrAcctId,
+        Dep_Amt as depAmt,
+        Dep_Retns as depRetns,
+        Dep_Bank_Name as depBankName,
+        Dep_Int_Rate as depIntRate,
+        With_In_Adv_Int_Loss_Ind as withInAdvIntLossInd,
+        Accrued_Mode_Cd as accruedModeCd,
+        Fix_Dep_Cal_Int_Mode_Cd as fixDepCalIntModeCd,
+        Fix_Dep_Int_Rate_Type_Cd as fixDepIntRateTypeCd,
+        Adj_Int_Mode_Cd as adjIntModeCd,
+        Pay_Int_Mode_Cd as payIntModeCd,
+        With_In_Adv_Remarks as withInAdvRemarks,
+        Branch as branch,
+        Cal_Int_Days as calIntDays,
+        Agr_Dep_lmt as agrDeplmt,
+        Agr_Dep_Int_Rate as agrDepIntRate,
+        FixPP_Amt as fixppAmt,
+        FixPP_Int_Rate as fixppIntRate,
+        FixPP_Dep_Amt_Rela_Cd as fixppDepAmtRelaCd,
+        Dep_Notice_Days as depNoticeDays,
+        Due_Dt_Enable_Ind as dueDtEnableInd,
+        Amt_Split as amtSplit,
+        Withdraw_Dt as withdrawDt,
+        Hook_Type as hookType,
+        Cal_Int_Type_Cd as calIntTypeCd,
+        Dep_Type_Cd as depTypeCd,
+        Pndg as pndg,
+        Reserve_Int_Rate as reserveIntRate,
+        Cal_Int_Base as calIntBase,
+        Float_Cal_Int_Ind as floatCalIntInd,
+        Bank_Acct_Id as bankAcctId,
+        Base_Ex_Rate as baseExRate,
+        Ptf_Ex_Rate as ptfExRate,
+        Hdl_User_Id as hdlUserId,
+        Chk_Usr_Id as chkUsrId,
+        Chk_Stat_Cd as chkStatCd
+        from
+           T05_BANK_DEP_TXN
+        where PTF_ID = 'Z00295'
+        AND
+        Start_Dt =#{startDt}
+    </select>
+    <!--银行存款业务修改-->
+    <update id="updateBankDeposit" parameterType="java.util.List">
+        update T05_BANK_DEP_TXN
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="Bargain_Id =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.bargainId}
+                </foreach>
+            </trim>
+            <trim prefix="Ptf_Id =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.ptfId}
+                </foreach>
+            </trim>
+            <trim prefix="Dep_Recpt_Id =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.depRecptId}
+                </foreach>
+            </trim>
+            <trim prefix="Start_Dt =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.startDt}
+                </foreach>
+            </trim>
+            <trim prefix="End_Dt =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.endDt}
+                </foreach>
+            </trim>
+            <trim prefix="Regular_Dep_Acct_Id =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.regularDepAcctId}
+                </foreach>
+            </trim>
+            <trim prefix="Int_Db_Acct_Id =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.intDbAcctId}
+                </foreach>
+            </trim>
+            <trim prefix="Dep_Amt =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.depAmt}
+                </foreach>
+            </trim>
+            <trim prefix="Dep_Retns =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.depRetns}
+                </foreach>
+            </trim>
+            <trim prefix="Dep_Bank_Name =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.depBankName}
+                </foreach>
+            </trim>
+            <trim prefix="Dep_Int_Rate =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.depIntRate}
+                </foreach>
+            </trim>
+            <trim prefix="Branch =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.branch}
+                </foreach>
+            </trim>
+            <trim prefix="Cal_Int_Days =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.calIntDays}
+                </foreach>
+            </trim>
+            <trim prefix="Dep_Type_Cd =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.depTypeCd}
+                </foreach>
+            </trim>
+        </trim>
+        where Id in
+        <foreach collection="list" index="index" item="item"
+                 separator="," open="(" close=")">
+            #{item.id,jdbcType=INTEGER}
+        </foreach>
+    </update>
+    <!--银行存款业务删除-->
+    <delete id="deleteBankDeposit" parameterType="java.util.List">
+        delete from T05_BANK_DEP_TXN where Id in
+        <foreach collection="list" item="id" open="(" separator="," close=")">#{id}
+        </foreach>
+    </delete>
+
+    <!--基金业务查询-->
+    <select id="queryFundBusiness" parameterType="com.yss.newexport.Entity.FundBusinessReportVO"
+            resultType="com.yss.newexport.Entity.FundBusinessReportVO">
+        SELECT
+        Id as id ,
+        JJCJBH as  jjcjbh,
+        date_format(JJDATE,'%Y-%m-%d') as jjdate,
+        JJCPDM as  jjcpdm,
+        JJYWLB as jjywlb,
+        JJJJDM as jjjjdm,
+        JJCJJE as jjcjje,
+        JJCJSL as jjcjsl,
+        JJJYFY as jjjyfy,
+        JJQJLX as jjqjlx,
+        JJZJZH as  jjzjzh,
+        JJJZFS as jjjzfs,
+        JJRELN as jjreln,
+        JJHLJZ as jjhljz,
+        JJJUSR as jjjusr,
+        JJSUSR as jjsusr,
+        JJSTAT as jjstat
+        from
+          EVLJJ
+        where
+            JJDATE = #{jjdate}
+            and
+            JJCPDM = 'Z00295'
+    </select>
+
+    <!--基金业务修改-->
+    <update id="updateFundBusiness" parameterType="java.util.List">
+        update EVLJJ
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="JJCJBH =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.jjcjbh}
+                </foreach>
+            </trim>
+            <trim prefix="JJDATE =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.jjdate}
+                </foreach>
+            </trim>
+            <trim prefix="JJCPDM =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.jjcpdm}
+                </foreach>
+            </trim>
+            <trim prefix="JJYWLB =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.jjywlb}
+                </foreach>
+            </trim>
+            <trim prefix="JJJJDM =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.jjjjdm}
+                </foreach>
+            </trim>
+            <trim prefix="JJCJJE =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.jjcjje}
+                </foreach>
+            </trim>
+            <trim prefix="JJCJSL =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.jjcjsl}
+                </foreach>
+            </trim>
+            <trim prefix="JJJYFY =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.jjjyfy}
+                </foreach>
+            </trim>
+            <trim prefix="JJQJLX =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.jjqjlx}
+                </foreach>
+            </trim>
+            <trim prefix="JJZJZH =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.jjzjzh}
+                </foreach>
+            </trim>
+            <trim prefix="JJJZFS =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.jjjzfs}
+                </foreach>
+            </trim>
+            <trim prefix="JJRELN =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.jjreln}
+                </foreach>
+            </trim>
+            <trim prefix="JJJUSR =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.jjjusr}
+                </foreach>
+            </trim>
+            <trim prefix="JJSUSR =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.jjsusr}
+                </foreach>
+            </trim>
+            <trim prefix="JJSTAT =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.jjstat}
+                </foreach>
+            </trim>
+        </trim>
+        where Id in
+        <foreach collection="list" index="index" item="item"
+                 separator="," open="(" close=")">
+            #{item.id,jdbcType=INTEGER}
+        </foreach>
+    </update>
+    <!--基金业务删除-->
+    <delete id="deleteFundBusiness" parameterType="java.util.List">
+        delete from EVLJJ where Id in
+        <foreach collection="list" item="id" open="(" separator="," close=")">#{id}
+        </foreach>
+    </delete>
+
+    <!--银行间回购查询-->
+    <select id="queryBankRepo" parameterType="com.yss.newexport.Entity.BankRepoReportVO"
+            resultType="com.yss.newexport.Entity.BankRepoReportVO">
+        SELECT
+        Id as id,
+        HGCPDM as hgcpdm,
+        HGCODE as hgcode,
+        HGCJBH as hgcjbh,
+        date_format(HGDATE,'%Y-%m-%d') as hgdate,
+        date_format(HGSTRD,'%Y-%m-%d') as hgstrd,
+        date_format(HGENDD,'%Y-%m-%d') as hgendd,
+        HGJSJG as hgjsjg,
+        HGJXTS as hgjxts,
+        HGHGFS as hghgfs,
+        HGHGFX as hghgfx,
+        HGCJJE as hgcjje,
+        HGFKJE as hgfkje,
+        HGHGLV as hghglv,
+        HGFSXF as hgfsxf,
+        HGFGHF as hgfghf,
+        HGFYHF as hgfyhf,
+        HGZJZH as hgzjzh,
+        HGGLFN as hgglfn,
+        HGJUSR as hgjusr,
+        HGSUSR as hgsusr,
+        HGSTAT as hgstat
+        from
+           YHJHG
+        where
+            HGDATE = #{hgdate}
+            and
+            HGCPDM = 'Z00295'
+    </select>
+    <!--银行间回购修改-->
+    <update id="updateBankRepo" parameterType="java.util.List">
+        update YHJHG
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="HGCPDM =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.hgcpdm}
+                </foreach>
+            </trim>
+            <trim prefix="HGCODE =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.hgcode}
+                </foreach>
+            </trim>
+            <trim prefix="HGCJBH =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.hgcjbh}
+                </foreach>
+            </trim>
+            <trim prefix="HGDATE =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.hgdate}
+                </foreach>
+            </trim>
+            <trim prefix="HGSTRD =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.hgstrd}
+                </foreach>
+            </trim>
+            <trim prefix="HGENDD =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.hgendd}
+                </foreach>
+            </trim>
+            <trim prefix="HGJSJG =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.hgjsjg}
+                </foreach>
+            </trim>
+            <trim prefix="HGJXTS =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.hgjxts}
+                </foreach>
+            </trim>
+            <trim prefix="HGCJJE =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.hghgfs}
+                </foreach>
+            </trim>
+            <trim prefix="HGCJJE =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.hghglv}
+                </foreach>
+            </trim>
+            <trim prefix="HGFKJE =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.hgfkje}
+                </foreach>
+            </trim>
+            <trim prefix="HGFSXF =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.hgfsxf}
+                </foreach>
+            </trim>
+            <trim prefix="HGFGHF =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.hgfghf}
+                </foreach>
+            </trim>
+            <trim prefix="HGFYHF =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.hgfyhf}
+                </foreach>
+            </trim>
+            <trim prefix="HGZJZH =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.hgzjzh}
+                </foreach>
+            </trim>
+            <trim prefix="HGGLFN =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.hgglfn}
+                </foreach>
+            </trim>
+        </trim>
+        where Id in
+        <foreach collection="list" index="index" item="item"
+                 separator="," open="(" close=")">
+            #{item.id,jdbcType=INTEGER}
+        </foreach>
+    </update>
+    <!--银行间回购删除-->
+    <delete id="deleteBankRepo" parameterType="java.util.List">
+        delete from YHJHG where Id in
+        <foreach collection="list" item="id" open="(" separator="," close=")">#{id}
+        </foreach>
+    </delete>
+
+    <!--银行间债券查询-->
+    <select id="queryBankSecurity" parameterType="com.yss.newexport.Entity.BankSecurityReportVO"
+            resultType="com.yss.newexport.Entity.BankSecurityReportVO">
+        SELECT
+        Id as  id ,
+        YZCPDM  as yzcpdm,
+        YZCJBH as yzcjbh,
+        date_format(YZDATE,'%Y-%m-%d') as yzdate,
+        YZJSJG as yzjsjg,
+        date_format(YZJGRQ,'%Y-%m-%d') as yzzqdm,
+        YZZQDM as yzzqdm,
+        YZZQLB  as yzzqlb,
+        YZLVLX as yzlvlx,
+        YZPMJE as yzpmje,
+        YZZJZH as yzzjzh,
+        YZJYLX as yzjylx,
+        YZJJJE as yzjjje,
+        YZSHLX as yzshlx,
+        YZCJSL as yzcjsl,
+        YZFSXF as yzfsxf,
+        YZFGHF as yzfghf,
+        YZFYHF as yzfyhf,
+        YZGLFN as yzglfn,
+        YZJUSR as yzjusr,
+        YZSUSR as yzsusr,
+        YZSTAT as yzstat
+        from
+          YHJZQ
+        where
+            YZDATE = #{yzdate}
+            and
+            YZCPDM = 'Z00295'
+    </select>
+
+    <!--银行间债券修改-->
+    <update id="updateBankSecurity" parameterType="java.util.List">
+        update YHJZQ
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="YZCPDM =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.yzcpdm}
+                </foreach>
+            </trim>
+            <trim prefix="YZDATE =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.yzdate}
+                </foreach>
+            </trim>
+            <trim prefix="YZCJBH =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.yzcjbh}
+                </foreach>
+            </trim>
+            <trim prefix="YZJSJG =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.yzjsjg}
+                </foreach>
+            </trim>
+            <trim prefix="YZJGRQ =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.yzjgrq}
+                </foreach>
+            </trim>
+            <trim prefix="YZZQDM =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.yzzqdm}
+                </foreach>
+            </trim>
+            <trim prefix="YZZQLB =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.yzzqlb}
+                </foreach>
+            </trim>
+            <trim prefix="YZLVLX =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.yzlvlx}
+                </foreach>
+            </trim>
+            <trim prefix="YZPMJE =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.yzpmje}
+                </foreach>
+            </trim>
+            <trim prefix="YZZJZH =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.yzzjzh}
+                </foreach>
+            </trim>
+            <trim prefix="YZJYLX =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.yzjylx}
+                </foreach>
+            </trim>
+            <trim prefix="YZJJJE =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.yzjjje}
+                </foreach>
+            </trim>
+            <trim prefix="YZSHLX =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.yzshlx}
+                </foreach>
+            </trim>
+            <trim prefix="YZCJSL =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.yzcjsl}
+                </foreach>
+            </trim>
+            <trim prefix="YZFSXF =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.yzfsxf}
+                </foreach>
+            </trim>
+            <trim prefix="YZFGHF =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.yzfghf}
+                </foreach>
+            </trim>
+            <trim prefix="YZGLFN =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.yzglfn}
+                </foreach>
+            </trim>
+        </trim>
+        where Id in
+        <foreach collection="list" index="index" item="item"
+                 separator="," open="(" close=")">
+            #{item.id,jdbcType=INTEGER}
+        </foreach>
+    </update>
+    <!--银行间债券刪除-->
+    <delete id="deleteBankSecurity" parameterType="java.util.List">
+        delete from YHJZQ where Id in
+        <foreach collection="list" item="id" open="(" separator="," close=")">#{id}
+        </foreach>
+    </delete>
+
+    <!--交易所清算查询-->
+    <select id="queryExchangeClear" parameterType="com.yss.newexport.Entity.ExchangeClearReportVO"
+            resultType="com.yss.newexport.Entity.ExchangeClearReportVO">
+        SELECT
+        Id as id ,
+        date_format(QSDATE,'%Y-%m-%d') as qsdate,
+        date_format(QSCRTD,'%Y-%m-%d') as qscrtd,
+        QSCPDM as qscpdm,
+        QSYWBZ as qsywbz,
+        QSGQDM as qsgqdm,
+        QSMKET as qsmket,
+        QSZQDM as qszqdm,
+        QSXWDM as qsxwdm,
+        QSMMBZ as qsmmbz,
+        QSCJSL as qscjsl,
+        QSCJJE as qscjje,
+        QSLXSY as qslxsy,
+        QSFYHS as qsfyhs,
+        QSFJSF as qsfjsf,
+        QSFZGF as qsfzgf,
+        QSFGHF as qsfghf,
+        QSFSTF as qsfstf,
+        QSFSXF as qsfsxf,
+        QSFFXJ as qsffxj,
+        QSFYJF as qsfyjf,
+        QSJYFS as qsjyfs,
+        QSSEQN as qsseqn,
+        QSSTAT as qsstat,
+        QSZHXX as qszhxx
+        from
+           JYSQS
+        where
+            QSDATE = #{qsdate}
+           and
+            QSCPDM = 'Z00295'
+    </select>
+    <!--交易所清算修改-->
+    <update id="updateExchangeClear" parameterType="java.util.List">
+        update JYSQS
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="QSDATE =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.qsdate}
+                </foreach>
+            </trim>
+            <trim prefix="QSCRTD =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.qscrtd}
+                </foreach>
+            </trim>
+            <trim prefix="QSCPDM =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.qscpdm}
+                </foreach>
+            </trim>
+            <trim prefix="QSYWBZ =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.qsywbz}
+                </foreach>
+            </trim>
+            <trim prefix="QSGQDM =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.qsgqdm}
+                </foreach>
+            </trim>
+            <trim prefix="QSMKET =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.qsmket}
+                </foreach>
+            </trim>
+            <trim prefix="QSZQDM =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.qszqdm}
+                </foreach>
+            </trim>
+            <trim prefix="QSXWDM =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.qsxwdm}
+                </foreach>
+            </trim>
+            <trim prefix="QSMMBZ =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.qsmmbz}
+                </foreach>
+            </trim>
+            <trim prefix="QSCJSL =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.qscjsl}
+                </foreach>
+            </trim>
+            <trim prefix="QSCJJE =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.qscjje}
+                </foreach>
+            </trim>
+            <trim prefix="QSLXSY =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.qslxsy}
+                </foreach>
+            </trim>
+            <trim prefix="QSFYHS =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.qsfyhs}
+                </foreach>
+            </trim>
+            <trim prefix="QSFJSF =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.qsfjsf}
+                </foreach>
+            </trim>
+            <trim prefix="QSFZGF =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.qsfzgf}
+                </foreach>
+            </trim>
+            <trim prefix="QSFGHF =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.qsfghf}
+                </foreach>
+            </trim>
+            <trim prefix="QSFSTF =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.qsfstf}
+                </foreach>
+            </trim>
+            <trim prefix="QSFFXJ =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.qsfsxf}
+                </foreach>
+            </trim>
+            <trim prefix="QSFYJF =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.qsfyjf}
+                </foreach>
+            </trim>
+            <trim prefix="QSJYFS =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.qsjyfs}
+                </foreach>
+            </trim>
+            <trim prefix="QSZHXX =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.qszhxx}
+                </foreach>
+            </trim>
+        </trim>
+        where Id in
+        <foreach collection="list" index="index" item="item"
+                 separator="," open="(" close=")">
+            #{item.id,jdbcType=INTEGER}
+        </foreach>
+    </update>
+    <!--交易所清算删除-->
+    <delete id="deleteExchangeClear" parameterType="java.util.List">
+        delete from JYSQS where Id in
+        <foreach collection="list" item="id" open="(" separator="," close=")">#{id}
+        </foreach>
+    </delete>
+
+    <!--投资组合信息查询-->
+    <select id="queryInvestReport" parameterType="java.lang.String"
+            resultType="com.yss.newexport.Entity.InvestReportVO">
+        SELECT
+        Id as id,
+        ptf_id as ptfId,
+        ptf_short_name as ptfShortName,
+        ptf_full_name as ptfFullName
+        from
+          T02_PTF;
+    </select>
+    <!--投资组合信息修改-->
+    <update id="updateInvestReport" parameterType="java.util.List">
+        update T02_PTF
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="ptf_id =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.ptfId}
+                </foreach>
+            </trim>
+            <trim prefix="ptf_short_name =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.ptfShortName}
+                </foreach>
+            </trim>
+            <trim prefix="ptf_full_name =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.ptfFullName}
+                </foreach>
+            </trim>
+        </trim>
+        where Id in
+        <foreach collection="list" index="index" item="item"
+                 separator="," open="(" close=")">
+            #{item.id,jdbcType=INTEGER}
+        </foreach>
+    </update>
+    <!--投资组合信息删除-->
+    <delete id="deleteInvestReport" parameterType="java.util.List">
+        delete from T02_PTF where Id in
+        <foreach collection="list" item="id" open="(" separator="," close=")">#{id}
+        </foreach>
+    </delete>
+
+</mapper>

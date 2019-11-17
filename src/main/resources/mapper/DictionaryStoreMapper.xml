@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yss.newexport.dao.Local.IdictionaryStoreDao">
+    <resultMap id="BaseResultMap" type="com.yss.newexport.Entity.DictionaryStoreVO">
+        <id column="Id" jdbcType="INTEGER" property="id"/>
+        <result column="Flag" jdbcType="VARCHAR" property="flag"/>
+        <result column="Flag_Name" jdbcType="VARCHAR" property="flagName"/>
+        <result column="Dict_Id" jdbcType="VARCHAR" property="dictId"/>
+        <result column="Dict_Val" jdbcType="VARCHAR" property="dictVal"/>
+        <result column="Datasource" jdbcType="VARCHAR" property="datasource"/>
+    </resultMap>
+
+    <!--查询字典-->
+    <select id="queryDictionaryStore" resultMap="BaseResultMap">
+         select Flag,Dict_Id,Dict_Val,Datasource from tb_dictionary_store  where Flag = #{flag} and Datasource= #{datasource}
+    </select>
+
+    <!--查询标识-->
+    <select id="queryFlag" resultMap="BaseResultMap">
+         select distinct Flag ,Flag_Name from tb_dictionary_store
+    </select>
+
+
+    <!--查询标识名称-->
+    <select id="queryFlagName" resultType="string">
+         select  distinct Flag_Name from tb_dictionary_store where  Flag =#{flag}
+    </select>
+
+</mapper>

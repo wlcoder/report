@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yss.newexport.dao.Local.IqueryFileDao">
+
+   <select id="queryBankSecurityByCon" parameterType="com.yss.newexport.Entity.QueryConVO" resultType="com.yss.newexport.Entity.BankSecurityReportVO">
+        SELECT
+          YZCPDM ,
+          YZCJBH ,
+          CONCAT(substr(date_format(YZDATE,'%Y-%m-%d'),1,4),substr(date_format(YZDATE,'%Y-%m-%d'),6,2),
+                 substr(date_format(YZDATE,'%Y-%m-%d'),9,2)) as YZDATE,
+          YZJSJG ,
+          CONCAT(substr(date_format(YZJGRQ,'%Y-%m-%d'),1,4),substr(date_format(YZJGRQ,'%Y-%m-%d'),6,2),
+                 substr(date_format(YZJGRQ,'%Y-%m-%d'),9,2)) as YZJGRQ,
+          YZZQDM ,
+          YZZQLB ,
+          YZLVLX ,
+          YZPMJE ,
+          YZZJZH ,
+          YZJYLX ,
+          YZJJJE ,
+          YZSHLX ,
+          YZCJSL ,
+          YZFSXF ,
+          YZFGHF ,
+          YZFYHF ,
+          YZGLFN ,
+          YZJUSR ,
+          YZSUSR ,
+          YZSTAT
+        from
+            YHJZQ
+          where YZDATE = str_to_date(#{queryDate},'%Y-%m-%d')
+          and YZCPDM = 'Z00295'
+   </select>
+
+  <select id="queryBankRepoByCon" parameterType="com.yss.newexport.Entity.QueryConVO" resultType="com.yss.newexport.Entity.BankRepoReportVO">
+        SELECT
+          HGCPDM,
+          HGCODE,
+          HGCJBH,
+          CONCAT(substr(date_format(HGDATE,'%Y-%m-%d'),1,4),substr(date_format(HGDATE,'%Y-%m-%d'),6,2),
+                 substr(date_format(HGDATE,'%Y-%m-%d'),9,2)) as HGDATE,
+
+          CONCAT(substr(date_format(HGSTRD,'%Y-%m-%d'),1,4),substr(date_format(HGSTRD,'%Y-%m-%d'),6,2),
+                 substr(date_format(HGSTRD,'%Y-%m-%d'),9,2)) as HGSTRD,
+
+          CONCAT(substr(date_format(HGENDD,'%Y-%m-%d'),1,4),substr(date_format(HGENDD,'%Y-%m-%d'),6,2),
+                 substr(date_format(HGENDD,'%Y-%m-%d'),9,2)) as HGENDD,
+          HGJSJG,
+          HGJXTS,
+          HGHGFS,
+          HGHGFX,
+          HGCJJE,
+          HGFKJE,
+          HGHGLV,
+          HGFSXF,
+          HGFGHF,
+          HGFYHF,
+          HGZJZH,
+          HGGLFN,
+          HGJUSR,
+          HGSUSR,
+          HGSTAT
+        from
+            YHJHG
+        where HGDATE = str_to_date(#{queryDate},'%Y-%m-%d')
+        and HGCPDM = 'Z00295'
+  </select>
+
+  <select id="queryBankDepositByCon" parameterType="com.yss.newexport.Entity.QueryConVO" resultType="com.yss.newexport.Entity.BankDepositReportVO">
+        SELECT
+           Bargain_Id as bargainId,
+           Ptf_Id as ptfId,
+           Dep_Recpt_Id as depRecptId,
+          CONCAT(substr(date_format(Start_Dt,'%Y-%m-%d'),1,4),substr(date_format(Start_Dt,'%Y-%m-%d'),6,2),
+                 substr(date_format(Start_Dt,'%Y-%m-%d'),9,2)) as startDt,
+
+          CONCAT(substr(date_format(End_Dt,'%Y-%m-%d'),1,4),substr(date_format(End_Dt,'%Y-%m-%d'),6,2),
+                 substr(date_format(End_Dt,'%Y-%m-%d'),9,2)) as endDt,
+           Dep_Biz_Type_Cd as depBizTypeCd,
+           With_In_Adv_Ind as withInAdvInd,
+           Saving_Dep_Acct_Id as savingDepAcctId,
+           Regular_Dep_Acct_Id as regularDepAcctId,
+           Int_Db_Acct_Id as intDbAcctId,
+           Int_Cr_Acct_Id as intCrAcctId,
+           Dep_Amt as depAmt,
+           Dep_Retns as depRetns,
+           Dep_Bank_Name as depBankName,
+           Dep_Int_Rate as depIntRate,
+           With_In_Adv_Int_Loss_Ind as withInAdvIntLossInd,
+           Accrued_Mode_Cd as accruedModeCd,
+           Fix_Dep_Cal_Int_Mode_Cd as fixDepCalIntModeCd,
+           Fix_Dep_Int_Rate_Type_Cd as fixDepIntRateTypeCd,
+           Adj_Int_Mode_Cd as adjIntModeCd,
+           Pay_Int_Mode_Cd as payIntModeCd,
+           With_In_Adv_Remarks as withInAdvRemarks,
+           Branch as branch,
+           Cal_Int_Days as calIntDays,
+           Agr_Dep_lmt as agrDeplmt,
+           Agr_Dep_Int_Rate as agrDepIntRate,
+           FixPP_Amt as fixppAmt,
+           FixPP_Int_Rate as fixppIntRate,
+           FixPP_Dep_Amt_Rela_Cd as fixppDepAmtRelaCd,
+           Dep_Notice_Days as depNoticeDays,
+           Due_Dt_Enable_Ind as dueDtEnableInd,
+           Amt_Split as amtSplit,
+           Withdraw_Dt as withdrawDt,
+           Hook_Type as hookType,
+           Cal_Int_Type_Cd as calIntTypeCd,
+           Dep_Type_Cd as depTypeCd,
+           Pndg as pndg,
+           Reserve_Int_Rate as reserveIntRate,
+           Cal_Int_Base as calIntBase,
+           Float_Cal_Int_Ind as floatCalIntInd,
+           Bank_Acct_Id as bankAcctId,
+           Base_Ex_Rate as baseExRate,
+           Ptf_Ex_Rate as ptfExRate,
+           Hdl_User_Id as hdlUserId,
+           Chk_Usr_Id as chkUsrId,
+           Chk_Stat_Cd as chkStatCd
+        from TEMP_T05_BANK_DEP_TXN
+          where PTF_ID = 'Z00295'
+            AND
+            Start_Dt &gt;= str_to_date(#{queryDate},'%Y-%m-%d')
+            AND
+            End_Dt  &lt;= str_to_date(#{queryDate},'%Y-%m-%d')
+  </select>
+
+  <select id="queryExchangeClearByCon" parameterType="com.yss.newexport.Entity.QueryConVO" resultType="com.yss.newexport.Entity.ExchangeClearReportVO">
+        SELECT
+          CONCAT(substr(date_format(QSDATE,'%Y-%m-%d'),1,4),substr(date_format(QSDATE,'%Y-%m-%d'),6,2),
+                 substr(date_format(QSDATE,'%Y-%m-%d'),9,2)) as QSDATE,
+
+          CONCAT(substr(date_format(QSCRTD,'%Y-%m-%d'),1,4),substr(date_format(QSCRTD,'%Y-%m-%d'),6,2),
+                 substr(date_format(QSCRTD,'%Y-%m-%d'),9,2)) as QSCRTD,
+          QSCPDM,
+          QSYWBZ,
+          QSGQDM,
+          QSMKET,
+          QSZQDM,
+          QSXWDM,
+          QSMMBZ,
+          QSCJSL,
+          QSCJJE,
+          QSLXSY,
+          QSFYHS,
+          QSFJSF,
+          QSFZGF,
+          QSFGHF,
+          QSFSTF,
+          QSFSXF,
+          QSFFXJ,
+          QSFYJF,
+          QSJYFS,
+          QSSEQN,
+          QSSTAT,
+          QSZHXX
+        from
+            JYSQS
+        where QSDATE = str_to_date(#{queryDate},'%Y-%m-%d')
+           and QSCPDM = 'Z00295'
+  </select>
+
+  <select id="queryInvestInfoByCon" parameterType="com.yss.newexport.Entity.QueryConVO" resultType="com.yss.newexport.Entity.InvestReportVO">
+       SELECT
+          ptf_id as ptfId,
+          ptf_short_name as ptfShortName,
+          ptf_full_name as ptfFullName
+       from
+           T02_PTF;
+  </select>
+
+  <select id="queryCourseCodeByCon" parameterType="com.yss.newexport.Entity.QueryConVO" resultType="com.yss.newexport.Entity.CourseCodeReportVO">
+       SELECT
+           Ptf_Id as ptfId,
+           Coa_Id as coaId,
+           Coa_Name as coaName,
+           Super_Coa_Id as superCoaId,
+           Coa_Lvl as coaLvl,
+           Dtl_Coa_Ind as dtlCoaInd,
+           Coa_Catg_Cd as coaCatgCd,
+           Coa_Attr as coaAttr,
+           Coa_Dir_Cd as coaDirCd,
+           Ccy_Cd as ccyCd,
+           Accting_Qty_Ind as acctingQtyInd,
+           Sum_Qty_Tfr_Ind as sumQtyTfrInd,
+           CONCAT(substr(date_format(Open_Dt,'%Y-%m-%d'),1,4),substr(date_format(Open_Dt,'%Y-%m-%d'),6,2),
+                 substr(date_format(Open_Dt,'%Y-%m-%d'),9,2)) as openDt,
+
+         CONCAT(substr(date_format(Close_Dt,'%Y-%m-%d'),1,4),substr(date_format(Close_Dt,'%Y-%m-%d'),6,2),
+                substr(date_format(Close_Dt,'%Y-%m-%d'),9,2)) as closeDt,
+           Usable_Ind as usableInd,
+           Secu_Cd as secuCd,
+           Exchange_Cd as exchangeCd,
+           Inv_Type_Cd as invTypeCd,
+           En_Name as enName,
+           Assist_Accting_Cd as assistAcctingCd
+        from
+            T04_COA
+        ORDER BY  Coa_Id
+  </select>
+
+  <select id="queryCourseBalanceByCon" parameterType="com.yss.newexport.Entity.QueryConVO" resultType="com.yss.newexport.Entity.CourseBalanceVO">
+       SELECT
+         Accting_Peroid as acctingPeroid,
+         Ptf_Id as ptfId,
+         Coa_Id as coaId,
+         Ccy_Cd as ccyCd,
+         init_Bal_Occy as initBalOccy,
+         Curr_Term_Db_Occurnc_Occy as currTermDbOccurncOccy,
+         Curr_Term_Cr_Occurnc_Occy as currTermCrOccurncOccy,
+         Aggr_Db_Occurnc_Occy as aggrDbOccurncOccy,
+         Aggr_Cr_Occurnc_Occy as aggrCrOccurncOccy,
+         Teminal_Bal_Occy as teminalBalOccy,
+         init_Qty as initQty,
+         Curr_Term_Db_Occur_Qty as currTermDbOccurQty,
+         Curr_Term_Cr_Occur_Qty as currTermCrOccurQty,
+         Aggr_Db_Occur_Qty as aggrDbOccurQty,
+         Aggr_Cr_Occur_Qty as aggrCrOccurQty,
+         Teminal_Qty as teminalQty,
+         init_Bal_Dccy as initBalDccy,
+         Curr_Term_Db_Occurnc_Dccy as currTermDbOccurncDccy,
+         Curr_Term_Cr_Occurnc_Dccy as currTermCrOccurncDccy,
+         Aggr_Db_Occurnc_Dccy as aggrDbOccurncDccy,
+         Aggr_Cr_Occurnc_Dccy as aggrCrOccurncDccy,
+         Teminal_Bal_Dccy as teminalBalDccy,
+         Assist_Accting_Cd as assistAcctingCd
+       from
+           T04_COA_GL_BAL
+       where
+         Accting_Peroid = CONCAT(substr(#{queryDate},1,4),substr(#{queryDate},6,2))
+         and
+         Ptf_Id = 'Z00295'
+         ORDER BY  Coa_Id
+  </select>
+
+  <select id="queryVoucherInfoByCon" parameterType="com.yss.newexport.Entity.QueryConVO" resultType="com.yss.newexport.Entity.VoucherReportVO">
+       SELECT
+         CONCAT(substr(date_format(Bill_Dt,'%Y-%m-%d'),1,4),substr(date_format(Bill_Dt,'%Y-%m-%d'),6,2),
+                substr(date_format(Bill_Dt,'%Y-%m-%d'),9,2)) as billDt,
+         Vch_Nbr as vchNbr,
+         Vch_Entries_Nbr as vchEntriesNbr,
+         Ptf_Id as ptfId,
+         Accting_Peroid as acctingPeroid,
+         Vch_Catg as vchCatg,
+         Coa_Id as coaId,
+         Ccy_Cd as ccyCd,
+         Ex_Rate as exRate,
+         Recnclt_Ind as recncltInd,
+         Txn_Amt_Occy as txnAmtOccy,
+         Txn_Amt_Dccy as txnAmtDccy,
+         Db_Cr_Ind as dbCrInd,
+         Txn_Qty as txnQty,
+         Unit_Prc as unitPrc,
+         Vch_Src_Cd as vchSrcCd,
+         Vch_Memo as vchMemo,
+         CONCAT(substr(date_format(Occur_Dt,'%Y-%m-%d'),1,4),substr(date_format(Occur_Dt,'%Y-%m-%d'),6,2),
+                substr(date_format(Occur_Dt,'%Y-%m-%d'),9,2)) as occurDt,
+         Bill_Tm as billTm,
+         Posting_Ind as postingInd,
+         Secu_Txn_Mode as secuTxnMode,
+         Src_Ptf_Id as srcPtfId,
+         Assist_Accting_Cd as assistAcctingCd,
+         Vch_Assoc_Nbr as vchAssocNbr,
+         In_Memo_Nbr as inMemoNbr,
+         Biz_Ref_Nbr as bizRefNbr,
+         GMS_Vch_Nbr as gmsVchNbr,
+         Remarks as remarks,
+         Reserve1 as reserve1,
+         Reserve2 as reserve2,
+         Bill_Usr_Id as billUsrId,
+         Chk_Usr_Id as chkUsrId,
+         Upd_Usr_Id as updUsrId,
+         Posting_Usr_Id as postingUsrId,
+         Cfm_Usr_Id as cfmUsrId,
+         Bond_Cd as bondCd,
+         Exchange_Cd as exchangeCd
+       from
+           T04_FIN_VCH
+       where
+         Bill_Dt = str_to_date(#{queryDate},'%Y-%m-%d')
+         and
+         Ptf_Id = 'Z00295'
+  </select>
+
+  <select id="queryEvalInfoByCon" parameterType="com.yss.newexport.Entity.QueryConVO" resultType="com.yss.newexport.Entity.EvalReportVO">
+       SELECT
+         CONCAT(substr(date_format(Evl_Dt,'%Y-%m-%d'),1,4),substr(date_format(Evl_Dt,'%Y-%m-%d'),6,2),
+                substr(date_format(Evl_Dt,'%Y-%m-%d'),9,2)) as evlDt,
+         Ptf_Id as ptfId,
+         Coa_Id as coaId,
+         Ccy_Cd as ccyCd,
+         Coa_Name as coaName,
+         Secu_Cd as secuCd,
+         Exchange_Cd as exchangeCd,
+         Secu_Qty as secuQty,
+         Unit_Buy_Cost as unitBuyCost,
+         Cost_Occy as costOccy,
+         Cost_Dccy as costDccy,
+         Cost_Nav_Ratio_Occy as costNavRatioOccy,
+         Cost_Nav_Ratio_Dccy as costNavRatioDccy,
+         Evl_Prc as evlPrc,
+         Mkt_Evl_Method_Cd as mktEvlMethodCd,
+         Mkt_Val_Occy as mktValOccy,
+         Mkt_Val_Dccy as mktValDccy,
+         Mkt_Nav_Ratio_Occy as mktNavRatioOccy,
+         Mkt_Nav_Ratio_Dccy as mktNavRatioDccy,
+         Evl_Aprct_Occy as evlAprctOccy,
+         Evl_Aprct_Dccy as evlAprctDccy,
+         Evl_Aprct_Nav_Ratio_Occy as evlAprctNavRatioOccy,
+         Evl_Aprct_Coa_Id as evlAprctCoaId,
+         Base_Ex_Rate as baseExRate,
+         Ptf_Ex_Rate as ptfExRate,
+         Convert_Profit_Loss as convertProfitLoss,
+         Rights_Info as rightsInfo,
+         Mkt_Desc as mktDesc,
+         Origin_Secu_Cd as originSecuCd
+       from
+           T04_FIN_EVL
+       where
+         Evl_Dt = str_to_date(#{queryDate},'%Y-%m-%d')
+         and
+         Ptf_Id = 'Z00295'
+      order by IS_SUM_UNIT,Coa_Id
+  </select>
+
+  <select id="queryFundBusinessByCon" parameterType="com.yss.newexport.Entity.QueryConVO" resultType="com.yss.newexport.Entity.FundBusinessReportVO">
+       SELECT
+         JJCJBH,
+         CONCAT(substr(date_format(JJDATE,'%Y-%m-%d'),1,4),substr(date_format(JJDATE,'%Y-%m-%d'),6,2),
+                substr(date_format(JJDATE,'%Y-%m-%d'),9,2)) as JJDATE,
+         JJCPDM,
+         JJYWLB,
+         JJJJDM,
+         JJCJJE,
+         JJCJSL,
+         JJJYFY,
+         JJQJLX,
+         JJZJZH,
+         JJJZFS,
+         JJRELN,
+         JJHLJZ,
+         JJJUSR,
+         JJSUSR,
+         JJSTAT
+       from
+           EVLJJ
+       where  JJDATE = str_to_date(#{queryDate},'%Y-%m-%d')
+              and JJCPDM = 'Z00295'
+  </select>
+
+   <!--查询 数据库列名-->
+   <select id="findFieldByTableName" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT
+           COLUMN_NAME
+        FROM
+          information_schema.COLUMNS
+       WHERE
+         table_name = #{tableName};
+   </select>
+</mapper>

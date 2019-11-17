@@ -1,0 +1,676 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yss.newexport.dao.Local.IgetLocalDataDao">
+
+    <delete id="deleteTempVoucherByCon" parameterType="java.lang.String">
+        delete
+        from
+            Temp_t04_fin_vch
+        where
+        Bill_Dt = str_to_date(#{ywdate},'%Y-%m-%d')
+        and
+        Ptf_Id = 'Z00295'
+    </delete>
+
+
+    <!--采集4.5估值系统 入库本地临时凭证表数据，保存一份原始的未做转换的数据-->
+    <insert id="saveTempLocalVoucher" parameterType="java.util.List">
+        INSERT INTO Temp_t04_fin_vch
+        ( Bill_Dt,Vch_Nbr,
+        Vch_Entries_Nbr,
+        Ptf_Id,Accting_Peroid,
+        Vch_Catg,Coa_Id,Ccy_Cd,
+        Ex_Rate,Recnclt_Ind,Txn_Amt_Occy,
+        Txn_Amt_Dccy,Db_Cr_Ind,
+        Txn_Qty,Unit_Prc,
+        Vch_Src_Cd,Vch_Memo,
+        Occur_Dt,Bill_Tm,Accessory_Qty,
+        Posting_Ind,Secu_Txn_Mode,
+        Src_Ptf_Id,Assist_Accting_Cd,
+        Vch_Assoc_Nbr,In_Memo_Nbr,
+        Biz_Ref_Nbr,GMS_Vch_Nbr,
+        Remarks,Reserve1,
+        Reserve2,Bill_Usr_Id,
+        Chk_Usr_Id,Upd_Usr_Id,
+        Posting_Usr_Id,Cfm_Usr_Id,
+        Bond_Cd,Exchange_Cd,
+        Security_type,Market_Code
+        )VALUES
+        <foreach collection="tempvochlist" index="index" item="item" separator=",">
+            (
+            <choose>
+                <when test="item.billDt != null and item.billDt !=''">
+                    str_to_date(#{item.billDt},'%Y-%m-%d'),
+                </when>
+                <otherwise>
+                    #{item.billDt},
+                </otherwise>
+            </choose>
+            #{item.vchNbr},
+            #{item.vchEntriesNbr},
+            #{item.ptfId},
+            #{item.acctingPeroid},
+            #{item.vchCatg},
+            #{item.coaId},
+            #{item.ccyCd},
+            #{item.exRate},
+            #{item.recncltInd},
+            #{item.txnAmtOccy},
+            #{item.txnAmtDccy},
+            #{item.dbCrInd},
+            #{item.txnQty},
+            #{item.unitPrc},
+            #{item.vchSrcCd},
+            #{item.vchMemo},
+            <choose>
+                <when test="item.occurDt != null and item.occurDt !=''">
+                    str_to_date(#{item.occurDt},'%Y-%m-%d'),
+                </when>
+                <otherwise>
+                    #{item.occurDt},
+                </otherwise>
+            </choose>
+            NULL,
+            #{item.accessoryQty},
+            #{item.postingInd},
+            #{item.secuTxnMode},
+            #{item.srcPtfId},
+            #{item.assistAcctingCd},
+            #{item.vchAssocNbr},
+            #{item.inMemoNbr},
+            #{item.bizRefNbr},
+            #{item.gmsVchNbr},
+            #{item.remarks},
+            #{item.reserve1},
+            #{item.reserve2},
+            #{item.billUsrId},
+            #{item.chkUsrId},
+            #{item.updUsrId},
+            #{item.postingUsrId},
+            #{item.cfmUsrId},
+            #{item.bondCd},
+            #{item.exchangeCd},
+            #{item.securityType},
+            #{item.marketCode}
+            )
+        </foreach>
+    </insert>
+
+
+    <delete id="deleteTempEvalByCon" parameterType="java.lang.String">
+        delete
+
+        from
+           Temp_T04_FIN_EVL
+        where
+        Evl_Dt = str_to_date(#{ywdate},'%Y-%m-%d')
+        and
+        Ptf_Id = 'Z00295'
+    </delete>
+
+    <!--保存4.5估值表数据，未做转换前的数据-->
+    <insert id="saveTempLocalEval" parameterType="java.util.List">
+        insert INTO Temp_T04_FIN_EVL
+        (
+        Evl_Dt,Ptf_Id,
+        Coa_Id,Ccy_Cd,
+        Coa_Name,Secu_Cd,
+        Exchange_Cd,Secu_Qty,
+        Unit_Buy_Cost,Cost_Occy,
+        Cost_Dccy, Cost_Nav_Ratio_Occy,
+        Cost_Nav_Ratio_Dccy,Evl_Prc,
+        Mkt_Evl_Method_Cd, Mkt_Val_Occy,
+        Mkt_Val_Dccy,Mkt_Nav_Ratio_Occy,
+        Mkt_Nav_Ratio_Dccy,Evl_Aprct_Occy,
+        Evl_Aprct_Dccy,Evl_Aprct_Nav_Ratio_Occy,
+        Evl_Aprct_Coa_Id,Base_Ex_Rate,
+        Ptf_Ex_Rate,Convert_Profit_Loss,
+        Rights_Info,Mkt_Desc,
+        Origin_Secu_Cd,is_Sum_Unit
+        ) VALUES
+        <foreach collection="tempevallist" index="index" item="item" separator=",">
+            (
+            <choose>
+                <when test="item.evlDt != null and item.evlDt !=''">
+                    str_to_date(#{item.evlDt},'%Y-%m-%d'),
+                </when>
+                <otherwise>
+                    #{item.evlDt},
+                </otherwise>
+            </choose>
+            #{item.ptfId},
+            #{item.coaId},
+            #{item.ccyCd},
+            #{item.coaName},
+            #{item.secuCd},
+            #{item.exchangeCd},
+            #{item.secuQty},
+            #{item.unitBuyCost},
+            #{item.costOccy},
+            #{item.costDccy},
+            #{item.costNavRatioOccy},
+            #{item.costNavRatioDccy},
+            #{item.evlPrc},
+            #{item.mktEvlMethodCd},
+            #{item.mktValOccy},
+            #{item.mktValDccy},
+            #{item.mktNavRatioOccy},
+            #{item.mktNavRatioDccy},
+            #{item.evlAprctOccy},
+            #{item.evlAprctDccy},
+            #{item.evlAprctNavRatioOccy},
+            #{item.evlAprctCoaId},
+            #{item.baseExRate},
+            #{item.ptfExRate},
+            #{item.convertProfitLoss},
+            #{item.rightsInfo},
+            #{item.mktDesc},
+            #{item.originSecuCd},
+            #{item.isSumUnit}
+            )
+        </foreach>
+    </insert>
+
+
+    <delete id="deleteTempCourseCode" parameterType="java.lang.String">
+        delete  from Temp_T04_COA
+    </delete>
+
+    <!--保存4.5科目表数据，进入临时表，未做转换前的数据-->
+    <insert id="saveTempCourseCode" parameterType="java.util.List">
+        INSERT into Temp_T04_COA
+        (
+        Ptf_Id,Coa_Id,
+        Coa_Name,Super_Coa_Id,
+        Coa_Lvl,Dtl_Coa_Ind,
+        Coa_Catg_Cd,Coa_Attr,
+        Coa_Dir_Cd,Ccy_Cd,
+        Accting_Qty_Ind,Sum_Qty_Tfr_Ind,
+        Open_Dt,Close_Dt,
+        Usable_Ind,Secu_Cd,
+        Exchange_Cd,Inv_Type_Cd,
+        En_Name,Assist_Accting_Cd
+        )values
+        <foreach collection="tempcourselist" index="index" item="item" separator=",">
+            (
+            #{item.ptfId},
+            #{item.coaId},
+            #{item.coaName},
+            #{item.superCoaId},
+            #{item.coaLvl},
+            #{item.dtlCoaInd},
+            #{item.coaCatgCd},
+            #{item.coaAttr},
+            #{item.coaDirCd},
+            #{item.ccyCd},
+            #{item.acctingQtyInd},
+            #{item.sumQtyTfrInd},
+            <choose>
+                <when test="item.openDt != null and item.openDt !=''">
+                    str_to_date(#{item.openDt},'%Y-%m-%d'),
+                </when>
+                <otherwise>
+                    #{item.openDt},
+                </otherwise>
+            </choose>
+
+            <choose>
+                <when test="item.closeDt != null and item.closeDt !=''">
+                    str_to_date(#{item.closeDt},'%Y-%m-%d'),
+                </when>
+                <otherwise>
+                    #{item.closeDt},
+                </otherwise>
+            </choose>
+            #{item.usableInd},
+            #{item.secuCd},
+            #{item.exchangeCd},
+            #{item.invTypeCd},
+            #{item.enName},
+            #{item.assistAcctingCd}
+            )
+        </foreach>
+    </insert>
+
+
+    <!--删除临时余额表数据-->
+    <delete id="deleteTempCourseBalance" parameterType="java.lang.String">
+        DELETE  from  Temp_T04_COA_GL_BAL
+        where
+        Accting_Peroid = CONCAT(substr(#{ywdate},1,4),substr(#{ywdate},6,2))
+        and
+        Ptf_Id = 'Z00295'
+    </delete>
+
+    <!--保存4.5余额表数据，进入临时表，未做转换前的数据-->
+    <insert id="saveTempCourseBalance" parameterType="java.util.List">
+        insert into Temp_T04_COA_GL_BAL
+        (
+        Accting_Peroid,Ptf_Id,
+        Coa_Id,Ccy_Cd,
+        init_Bal_Occy,Curr_Term_Db_Occurnc_Occy,
+        Curr_Term_Cr_Occurnc_Occy,Aggr_Db_Occurnc_Occy,
+        Aggr_Cr_Occurnc_Occy,Teminal_Bal_Occy,
+        init_Qty,Curr_Term_Db_Occur_Qty,
+        Curr_Term_Cr_Occur_Qty,Aggr_Db_Occur_Qty,
+        Aggr_Cr_Occur_Qty,Teminal_Qty,
+        init_Bal_Dccy,Curr_Term_Db_Occurnc_Dccy,
+        Curr_Term_Cr_Occurnc_Dccy,Aggr_Db_Occurnc_Dccy,
+        Aggr_Cr_Occurnc_Dccy,Teminal_Bal_Dccy,
+        Assist_Accting_Cd,n_Detail
+        )VALUES
+        <foreach collection="tempbalancelist" index="index" item="item" separator=",">
+            (
+            #{item.acctingPeroid},
+            #{item.ptfId},
+            #{item.coaId},
+            #{item.ccyCd},
+            #{item.initBalOccy},
+            #{item.currTermDbOccurncOccy},
+            #{item.currTermCrOccurncOccy},
+            #{item.aggrDbOccurncOccy},
+            #{item.aggrCrOccurncOccy},
+            #{item.teminalBalOccy},
+            #{item.initQty},
+            #{item.currTermDbOccurQty},
+            #{item.currTermCrOccurQty},
+            #{item.aggrDbOccurQty},
+            #{item.aggrCrOccurQty},
+            #{item.teminalQty},
+            #{item.initBalDccy},
+            #{item.currTermDbOccurncDccy},
+            #{item.currTermCrOccurncDccy},
+            #{item.aggrDbOccurncDccy},
+            #{item.aggrCrOccurncDccy},
+            #{item.teminalBalDccy},
+            #{item.assistAcctingCd},
+            #{item.nDetail}
+            )
+        </foreach>
+    </insert>
+
+
+    <delete id="deleteTempBankDeposit" parameterType="java.lang.String">
+        delete from Temp_T05_BANK_DEP_TXN
+        where
+        Ptf_Id = 'Z00295'
+        AND
+        Start_Dt &gt;= str_to_date(#{ywdate},'%Y-%m-%d')
+        AND
+        End_Dt  &lt;= str_to_date(#{ywdate},'%Y-%m-%d')
+    </delete>
+
+    <insert id="saveTempBankDeposit" parameterType="java.util.List">
+        insert into Temp_T05_BANK_DEP_TXN
+        (
+        Bargain_Id,Ptf_Id,
+        Dep_Recpt_Id,Start_Dt,
+        End_Dt,Dep_Biz_Type_Cd,
+        With_In_Adv_Ind,Saving_Dep_Acct_Id,
+        Regular_Dep_Acct_Id,Int_Db_Acct_Id,
+        Int_Cr_Acct_Id,Dep_Amt,
+        Dep_Retns,Dep_Bank_Name,
+        Dep_Int_Rate,With_In_Adv_Int_Loss_Ind,
+        Accrued_Mode_Cd,Fix_Dep_Cal_Int_Mode_Cd,
+        Fix_Dep_Int_Rate_Type_Cd,Adj_Int_Mode_Cd,
+        Pay_Int_Mode_Cd,With_In_Adv_Remarks,
+        Branch,Cal_Int_Days,
+        Agr_Dep_lmt,Agr_Dep_Int_Rate,
+        FixPP_Amt,FixPP_Int_Rate,
+        FixPP_Dep_Amt_Rela_Cd,Dep_Notice_Days,
+        Due_Dt_Enable_Ind,Amt_Split,
+        Withdraw_Dt,Hook_Type,
+        Cal_Int_Type_Cd,Dep_Type_Cd,
+        Pndg,Reserve_Int_Rate,
+        Cal_Int_Base,Float_Cal_Int_Ind,
+        Bank_Acct_Id,Base_Ex_Rate,
+        Ptf_Ex_Rate,Hdl_User_Id,
+        Chk_Usr_Id,Chk_Stat_Cd
+        ) values
+        <foreach collection="tempbankdeposlist" index="index" item="item" separator=",">
+            (
+            #{item.bargainId},
+            #{item.ptfId},
+            #{item.depRecptId},
+            <choose>
+                <when test="item.startDt != null and item.startDt !=''">
+                    str_to_date(#{item.startDt},'%Y-%m-%d'),
+                </when>
+                <otherwise>
+                    #{item.startDt},
+                </otherwise>
+            </choose>
+
+            <choose>
+                <when test="item.endDt != null and item.endDt !=''">
+                    str_to_date(#{item.endDt},'%Y-%m-%d'),
+                </when>
+                <otherwise>
+                    #{item.endDt},
+                </otherwise>
+            </choose>
+            #{item.depBizTypeCd},
+            #{item.withInAdvInd},
+            #{item.savingDepAcctId},
+            #{item.regularDepAcctId},
+            #{item.intDbAcctId},
+            #{item.intCrAcctId},
+            #{item.depAmt},
+            #{item.depRetns},
+            #{item.depBankName},
+            #{item.depIntRate},
+            #{item.withInAdvIntLossInd},
+            #{item.accruedModeCd},
+            #{item.fixDepCalIntModeCd},
+            #{item.fixDepIntRateTypeCd},
+            #{item.adjIntModeCd},
+            #{item.payIntModeCd},
+            #{item.withInAdvRemarks},
+            #{item.branch},
+            #{item.calIntDays},
+            #{item.agrDepLmt},
+            #{item.agrDepIntRate},
+            #{item.fixppAmt},
+            #{item.fixppIntRate},
+            #{item.fixppDepAmtRelaCd},
+            #{item.depNoticeDays},
+            #{item.dueDtEnableInd},
+            #{item.amtSplit},
+            #{item.withdrawDt},
+            #{item.hookType},
+            #{item.calIntTypeCd},
+            #{item.depTypeCd},
+            #{item.pndg},
+            #{item.reserveIntRate},
+            #{item.calIntBase},
+            #{item.floatCalIntInd},
+            #{item.bankAcctId},
+            #{item.baseExRate},
+            #{item.ptfExRate},
+            #{item.hdlUserId},
+            #{item.chkUsrId},
+            #{item.chkStatCd}
+            )
+        </foreach>
+    </insert>
+
+
+    <delete id="deleteTempFund" parameterType="java.lang.String">
+        DELETE  from TEMP_EVLJJ
+        where  JJDATE = str_to_date(#{ywdate},'%Y-%m-%d')
+        and JJCPDM = 'Z00295'
+    </delete>
+
+    <insert id="saveTempFund" parameterType="java.util.List">
+        insert into TEMP_EVLJJ
+        (
+        JJCJBH,
+        JJDATE,
+        JJCPDM,
+        JJYWLB,
+        JJJJDM,
+        JJCJJE,
+        JJCJSL,
+        JJJYFY,
+        JJQJLX,
+        JJZJZH,
+        JJJZFS,
+        JJRELN,
+        JJHLJZ,
+        JJJUSR,
+        JJSUSR,
+        JJSTAT
+        )VALUES
+        <foreach collection="tempfundlist" index="index" item="item" separator=",">
+            (
+            #{item.jjcjbh},
+            <choose>
+                <when test="item.jjdate != null and item.jjdate !=''">
+                    str_to_date(#{item.jjdate},'%Y-%m-%d'),
+                </when>
+                <otherwise>
+                    #{item.jjdate},
+                </otherwise>
+            </choose>
+            #{item.jjcpdm},
+            #{item.jjywlb},
+            #{item.jjjjdm},
+            #{item.jjcjje},
+            #{item.jjcjsl},
+            #{item.jjjyfy},
+            #{item.jjqjlx},
+            #{item.jjzjzh},
+            #{item.jjjzfs},
+            #{item.jjreln},
+            #{item.jjhljz},
+            #{item.jjjusr},
+            #{item.jjsusr},
+            #{item.jjstat}
+            )
+        </foreach>
+    </insert>
+
+    <delete id="deleteTempInvest" parameterType="java.lang.String">
+        delete from Temp_T02_PTF
+    </delete>
+
+
+    <insert id="saveTempInvest" parameterType="java.util.List">
+        insert into Temp_T02_PTF
+        (
+            ptf_id,
+            ptf_short_name,
+            ptf_full_name
+        )VALUES
+        <foreach collection="tempinvestlist" index="index" item="item" separator=",">
+            (
+            #{item.ptfId},
+            #{item.ptfShortName},
+            #{item.ptfFullName}
+            )
+        </foreach>
+    </insert>
+
+
+    <delete id="deleteTempExchange" parameterType="java.lang.String">
+        delete from TEMP_JYSQS where QSDATE = str_to_date(#{ywdate},'%Y-%m-%d')
+          and QSCPDM = 'Z00295'
+    </delete>
+
+    <insert id="saveTempExchange" parameterType="java.util.List">
+        INSERT into TEMP_JYSQS
+        (
+        QSDATE,QSCRTD,
+        QSCPDM,QSYWBZ,
+        QSGQDM,QSMKET,
+        QSZQDM,QSXWDM,
+        QSMMBZ,QSCJSL,
+        QSCJJE,QSLXSY,
+        QSFYHS,QSFJSF,
+        QSFZGF,QSFGHF,
+        QSFSTF,QSFSXF,
+        QSFFXJ,QSFYJF,
+        QSJYFS,QSZHXX,
+        C_SEC_VAR_MX,C_DV_TYPE_SUB
+        )values
+        <foreach collection="tempexchangelist" index="index" item="item" separator=",">
+            (
+            <choose>
+                <when test="item.qsdate != null and item.qsdate !=''">
+                    str_to_date(#{item.qsdate},'%Y-%m-%d'),
+                </when>
+                <otherwise>
+                    #{item.qsdate},
+                </otherwise>
+            </choose>
+
+            <choose>
+                <when test="item.qscrtd != null and item.qscrtd !=''">
+                    str_to_date(#{item.qscrtd},'%Y-%m-%d'),
+                </when>
+                <otherwise>
+                    #{item.qscrtd},
+                </otherwise>
+            </choose>
+            #{item.qscpdm},
+            #{item.qsywbz},
+            #{item.qsgqdm},
+            #{item.qsmket},
+            #{item.qszqdm},
+            #{item.qsxwdm},
+            #{item.qsmmbz},
+            #{item.qscjsl},
+            #{item.qscjje},
+            #{item.qslxsy},
+            #{item.qsfyhs},
+            #{item.qsfjsf},
+            #{item.qsfzgf},
+            #{item.qsfghf},
+            #{item.qsfstf},
+            #{item.qsfsxf},
+            #{item.qsffxj},
+            #{item.qsfyjf},
+            #{item.qsjyfs},
+            #{item.qszhxx},
+            #{item.cSecVarMx},
+            #{item.cDvTypeSub}
+            )
+        </foreach>
+    </insert>
+
+
+
+    <delete id="deleteTempBankSecurity" parameterType="java.lang.String">
+        delete from  TEMP_YHJZQ
+          where YZDATE = str_to_date(#{ywdate},'%Y-%m-%d')
+          and YZCPDM = 'Z00295'
+    </delete>
+
+    <insert id="saveTempBankSecurity" parameterType="java.util.List">
+        insert into YHJZQ
+        (
+        YZCPDM,YZCJBH,
+        YZDATE,YZJSJG,
+        YZJGRQ,YZZQDM,
+        YZZQLB,YZLVLX,
+        YZPMJE,YZZJZH,
+        YZJYLX,YZJJJE,
+        YZSHLX,YZCJSL,
+        YZFSXF,YZFGHF,
+        YZFYHF,YZGLFN,
+        YZJUSR,YZSUSR,
+        YZSTAT
+        )VALUES
+        <foreach collection="tempbanksecuritylist" index="index" item="item" separator=",">
+            (
+            #{item.yzcpdm},
+            #{item.yzcjbh},
+            <choose>
+                <when test="item.yzdate != null and item.yzdate !=''">
+                    str_to_date( #{item.yzdate},'%Y-%m-%d'),
+                </when>
+                <otherwise>
+                    #{item.yzdate},
+                </otherwise>
+            </choose>
+            #{item.yzjsjg},
+            <choose>
+                <when test="item.yzjgrq != null and item.yzjgrq !=''">
+                    str_to_date(#{item.yzjgrq},'%Y-%m-%d'),
+                </when>
+                <otherwise>
+                    #{item.yzjgrq},
+                </otherwise>
+            </choose>
+            #{item.yzzqdm},
+            #{item.yzzqlb},
+            #{item.yzlvlx},
+            #{item.yzpmje},
+            #{item.yzzjzh},
+            #{item.yzjylx},
+            #{item.yzjjje},
+            #{item.yzshlx},
+            #{item.yzcjsl},
+            #{item.yzfsxf},
+            #{item.yzfghf},
+            #{item.yzfyhf},
+            #{item.yzglfn},
+            #{item.yzjusr},
+            #{item.yzsusr},
+            #{item.yzstat}
+            )
+        </foreach>
+    </insert>
+
+
+    <delete id="deleteTempBankRepo" parameterType="java.lang.String">
+        delete from Temp_YHJHG
+        where HGDATE = str_to_date(#{ywdate},'%Y-%m-%d')
+         and HGCPDM = 'Z00295'
+    </delete>
+
+    <insert id="saveTempBankRepo" parameterType="java.util.List">
+        insert into Temp_YHJHG
+        (
+        HGCPDM,HGCODE,
+        HGCJBH,HGDATE,
+        HGSTRD,HGENDD,
+        HGJSJG,HGJXTS,
+        HGHGFS,HGHGFX,
+        HGCJJE,HGFKJE,
+        HGHGLV,HGFSXF,
+        HGFGHF,HGFYHF,
+        HGZJZH,HGGLFN,
+        HGJUSR,HGSUSR,
+        HGSTAT
+        )VALUES
+        <foreach collection="temptempbankrepolist" index="index" item="item" separator=",">
+            (
+            #{item.hgcpdm},
+            #{item.hgcode},
+            #{item.hgcjbh},
+            <choose>
+                <when test="item.hgdate != null and item.hgdate !=''">
+                    str_to_date(#{item.hgdate},'%Y-%m-%d'),
+                </when>
+                <otherwise>
+                    #{item.hgdate},
+                </otherwise>
+            </choose>
+
+            <choose>
+                <when test="item.hgstrd != null and item.hgstrd !=''">
+                    str_to_date(#{item.hgstrd},'%Y-%m-%d'),
+                </when>
+                <otherwise>
+                    #{item.hgstrd},
+                </otherwise>
+            </choose>
+
+            <choose>
+                <when test="item.hgendd != null and item.hgendd !=''">
+                    str_to_date(#{item.hgendd},'%Y-%m-%d'),
+                </when>
+                <otherwise>
+                    #{item.hgendd},
+                </otherwise>
+            </choose>
+            #{item.hgjsjg},
+            #{item.hgjxts},
+            #{item.hghgfs},
+            #{item.hghgfx},
+            #{item.hgcjje},
+            #{item.hgfkje},
+            #{item.hghglv},
+            #{item.hgfsxf},
+            #{item.hgfghf},
+            #{item.hgfyhf},
+            #{item.hgzjzh},
+            #{item.hgglfn},
+            #{item.hgjusr},
+            #{item.hgsusr},
+            #{item.hgstat}
+            )
+        </foreach>
+    </insert>
+</mapper>

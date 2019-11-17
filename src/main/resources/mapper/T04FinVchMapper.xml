@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yss.newexport.dao.Local.It04FinVchDao">
+    <resultMap id="BaseResultMap" type="com.yss.newexport.Entity.T04FinVchVO">
+        <id column="Id" jdbcType="INTEGER" property="id"/>
+        <result column="Bill_Dt" jdbcType="VARCHAR" property="billDt"/>
+        <result column="Vch_Nbr" jdbcType="VARCHAR" property="vchNbr"/>
+        <result column="Vch_Entries_Nbr" jdbcType="VARCHAR" property="vchEntriesNbr"/>
+        <result column="Ptf_Id" jdbcType="VARCHAR" property="ptfId"/>
+        <result column="Accting_Peroid" jdbcType="VARCHAR" property="acctingPeroid"/>
+        <result column="Vch_Catg" jdbcType="VARCHAR" property="vchCatg"/>
+        <result column="Coa_Id" jdbcType="VARCHAR" property="coaId"/>
+        <result column="Ccy_Cd" jdbcType="VARCHAR" property="ccyCd"/>
+        <result column="Ex_Rate" jdbcType="DECIMAL" property="exRate"/>
+        <result column="Recnclt_Ind" jdbcType="VARCHAR" property="recncltInd"/>
+        <result column="Txn_Amt_Occy" jdbcType="VARCHAR" property="txnAmtOccy"/>
+        <result column="Txn_Amt_Dccy" jdbcType="VARCHAR" property="txnAmtDccy"/>
+        <result column="Db_Cr_Ind" jdbcType="DECIMAL" property="dbCrInd"/>
+        <result column="Txn_Qty" jdbcType="DECIMAL" property="txnQty"/>
+        <result column="Unit_Prc" jdbcType="DECIMAL" property="unitPrc"/>
+        <result column="Vch_Src_Cd" jdbcType="VARCHAR" property="vchSrcCd"/>
+        <result column="Vch_Memo" jdbcType="VARCHAR" property="vchMemo"/>
+        <result column="Occur_Dt" jdbcType="VARCHAR" property="occurDt"/>
+        <result column="Bill_Tm" jdbcType="VARCHAR" property="billTm"/>
+        <result column="Posting_Ind" jdbcType="VARCHAR" property="postingInd"/>
+        <result column="Secu_Txn_Mode" jdbcType="VARCHAR" property="secuTxnMode"/>
+        <result column="Src_Ptf_Id" jdbcType="VARCHAR" property="srcPtfId"/>
+        <result column="Assist_Accting_Cd" jdbcType="VARCHAR" property="assistAcctingCd"/>
+        <result column="Vch_Assoc_Nbr" jdbcType="VARCHAR" property="vchAssocNbr"/>
+        <result column="In_Memo_Nbr" jdbcType="VARCHAR" property="inMemoNbr"/>
+        <result column="Biz_Ref_Nbr" jdbcType="VARCHAR" property="bizRefNbr"/>
+        <result column="GMS_Vch_Nbr" jdbcType="VARCHAR" property="gmsVchNbr"/>
+        <result column="Remarks" jdbcType="VARCHAR" property="remarks"/>
+        <result column="Reserve1" jdbcType="VARCHAR" property="reserve1"/>
+        <result column="Reserve2" jdbcType="VARCHAR" property="reserve2"/>
+        <result column="Bill_Usr_Id" jdbcType="VARCHAR" property="bilingUsrId"/>
+        <result column="Chk_Usr_Id" jdbcType="VARCHAR" property="chkUsrId"/>
+        <result column="Upd_Usr_Id" jdbcType="VARCHAR" property="updUsrId"/>
+        <result column="Posting_Usr_Id" jdbcType="VARCHAR" property="postingUsrId"/>
+        <result column="Cfm_Usr_Id" jdbcType="VARCHAR" property="cfmUsrId"/>
+        <result column="Bond_Cd" jdbcType="VARCHAR" property="bondCd"/>
+        <result column="Exchange_Cd" jdbcType="VARCHAR" property="exchangeCd"/>
+
+    </resultMap>
+
+    <!--查询-->
+    <select id="queryT04FinVch" resultMap="BaseResultMap">
+        select Id ,Bill_Dt,Vch_Nbr,Vch_Entries_Nbr,Ptf_Id,Vch_Catg,Coa_Id,Ccy_Cd,
+        Ex_Rate,Recnclt_Ind,Txn_Amt_Occy,Txn_Amt_Dccy,Db_Cr_Ind,Txn_Qty,Unit_Prc,Vch_Src_Cd,Vch_Memo
+        from t04_fin_vch where Bill_Dt = #{billDt}
+        <!--<where>
+            <if test="billDt != null">
+                 Bill_Dt = ${billDt}
+            </if>
+        </where>-->
+    </select>
+
+    <!--修改-->
+    <update id="updateT04FinVch" parameterType="java.util.List">
+        update t04_fin_vch
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="Bill_Dt =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.billDt}
+                </foreach>
+            </trim>
+            <trim prefix="Vch_Nbr =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.vchNbr}
+                </foreach>
+            </trim>
+            <trim prefix="Vch_Entries_Nbr =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.vchEntriesNbr}
+                </foreach>
+            </trim>
+            <trim prefix="Ptf_Id =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.ptfId}
+                </foreach>
+            </trim>
+            <trim prefix="Vch_Catg =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.vchCatg}
+                </foreach>
+            </trim>
+            <trim prefix="Coa_Id =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.coaId}
+                </foreach>
+            </trim>
+            <trim prefix="Ccy_Cd =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.ccyCd}
+                </foreach>
+            </trim>
+            <trim prefix="Ex_Rate =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.exRate}
+                </foreach>
+            </trim>
+            <trim prefix="Recnclt_Ind =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.recncltInd}
+                </foreach>
+            </trim>
+            <trim prefix="Txn_Amt_Occy =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.txnAmtOccy}
+                </foreach>
+            </trim>
+            <trim prefix="Txn_Amt_Dccy =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.txnAmtDccy}
+                </foreach>
+            </trim>
+            <trim prefix="Db_Cr_Ind =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.dbCrInd}
+                </foreach>
+            </trim>
+            <trim prefix="Txn_Qty =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.txnQty}
+                </foreach>
+            </trim>
+            <trim prefix="Unit_Prc =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.unitPrc}
+                </foreach>
+            </trim>
+            <trim prefix="Vch_Src_Cd =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.vchSrcCd}
+                </foreach>
+            </trim>
+            <trim prefix="Vch_Memo =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when Id = #{item.id} then #{item.vchMemo}
+                </foreach>
+            </trim>
+        </trim>
+        where Id in
+        <foreach collection="list" index="index" item="item"
+                 separator="," open="(" close=")">
+            #{item.id,jdbcType=INTEGER}
+        </foreach>
+
+    </update>
+
+    <!--删除-->
+    <delete id="delT04FinVch" parameterType="java.util.List">
+        delete from t04_fin_vch where Id in
+        <foreach collection="list" item="id" open="(" separator="," close=")">#{id}
+        </foreach>
+    </delete>
+</mapper>

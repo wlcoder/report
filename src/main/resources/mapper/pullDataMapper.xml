@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yss.newexport.dao.Remote.IremoteDataPullDao">
+
+   <!--采集4.5估值系统 查询银行间回购数据-->
+   <select id="pullBankRepo" parameterType="java.lang.String" resultType="com.yss.newexport.Entity.BankRepoReportVO">
+          select
+              a.C_ASSET_CODE as hgcpdm,
+              a.C_SEC_CODE as hgcode,
+              a.C_OD_NUMBER as hgcjbh,
+              to_char(a.D_TRADE_DATE,'yyyy-MM-dd') as hgdate,
+              to_char(a.D_TRADE_DATE,'yyyy-MM-dd') as hgstrd,
+              to_char(a.D_SETTLE,'yyyy-MM-dd') as hgendd,
+              a.C_SETT_ORG as hgjsjg,
+              a.N_Days as hgjxts,
+              b.C_SEC_VAR_MX as hghgfs,
+              a.C_TD_TYPE as hghgfx,
+              a.N_TD_MONEY as hgcjje,
+              a.N_TD_MONEY+N_TD_INCOME as hgfkje,
+              a.N_HG_RATE  as hghglv,
+              a.N_TD_FEE as hgfsxf,
+              a.N_TD_GHF as hgfghf,
+              a.N_TD_JSFWF+N_TD_COMM as hgfyhf,
+              a.C_TD_RELAPARTY AS hgglfn
+          from
+             VC_REPURCHASE_YH a
+            LEFT JOIN
+            VB_SECURITY b
+            on a.C_SEC_CODE = b.C_SEC_CODE  and  a.C_MKT_CODE =b.C_MKT_CODE
+          where
+              a.D_TRADE_DATE = to_date(#{pullDate},'yyyy-MM-dd HH:mi:ss')
+              and
+              a.C_ASSET_CODE = 'Z00295'
+   </select>
+
+  <!--采集4.5估值系统 查询银行间债券数据-->
+   <select id="pullBankSecurity" parameterType="java.lang.String" resultType="com.yss.newexport.Entity.BankSecurityReportVO">
+       SELECT
+           a.C_ASSET_CODE as yzcpdm,
+           a.C_OD_NUMBER as yzcjbh,
+           to_char(a.D_BIZ,'yyyy-MM-dd')  as yzdate,
+           a.C_SETT_ORG as yzjsjg,
+           to_char(a.D_SETTLE,'yyyy-MM-dd') as yzjgrq,
+           a.C_SEC_CODE as yzzqdm,
+           b.C_SEC_VAR_MX as yzzqlb,
+           CASE  when b.C_DV_RIGHT = 'NULLRIGHT' then b.C_DV_AI_MOD
+           when  b.C_DV_RIGHT is null then b.C_DV_AI_MOD
+           else b.C_DV_RIGHT end as yzlvlx,
+           b.N_FV_ISSUE as yzpmje,
+           a.C_DT_CODE as yzjylx,
+           a.N_TD_MONEY as yzjjje,
+           a.N_TD_INCOME as yzshlx,
+           a.N_TD_AMOUNT as yzcjsl,
+           a.N_TD_JSFWF as yzfsxf,
+           a.N_TD_FEE as yzfghf,
+           a.C_TD_RELAPARTY as yzglfn
+       from
+          VC_BONDS_YH a
+          LEFT JOIN
+          VB_SECURITY b
+          on a.C_SEC_CODE =b.C_SEC_CODE and b.C_MKT_CODE = a.C_MKT_CODE
+       where
+           a.D_BIZ = to_date(#{pullDate},'yyyy-MM-dd HH:mi:ss')
+           and
+           a.C_ASSET_CODE = 'Z00295'
+   </select>
+
+
+   <!--采集估值4.5系统，查询银行存款数据-->
+   <select id="pullBankDesposit" parameterType="java.lang.String" resultType="com.yss.newexport.Entity.BankDepositReportVO">
+         SELECT
+            C_TD_NUMBER as bargainId,
+            C_ASSET_CODE as ptfId,
+            C_OD_NUMBER as depRecptId,
+            to_char(D_BIZ_FIRST,'yyyy-MM-dd') as startDt,
+            to_char(D_FWDDUE,'yyyy-MM-dd') as endDt,
+            N_TD_MONEY as depAmt,
+            N_YSLX as depRetns,
+            C_BANK_NAME as depBankName,
+            N_JZ_RATE as depIntRate,
+            C_BRANCH_BANK_NAME as Branch,
+            C_SEC_VAR_MX as depTypeCd
+         from
+            VC_DEPOSIT
+         where
+            C_ASSET_CODE = 'Z00295'
+            AND
+            D_BIZ_FIRST &lt;= to_date(#{pullDate},'yyyy-MM-dd HH:mi:ss')
+            AND
+            D_FWDDUE  &gt;= to_date(#{pullDate},'yyyy-MM-dd HH:mi:ss')
+   </select>
+
+
+   <select id="pullFund" parameterType="java.lang.String" resultType="com.yss.newexport.Entity.FundBusinessReportVO">
+        select
+           N_ID as jjcjbh,
+           to_char(D_BIZ,'yyyy-MM-dd') as jjdate,
+           C_ASSET_CODE as jjcpdm,
+           C_SEC_CODE as jjjjdm,
+           N_TD_MONEY as jjcjje,
+           N_TD_AMOUNT as jjcjsl,
+           N_RGF+N_SGF+N_SHF as jjjyfy,
+           N_ID_SUB as jjreln,
+           C_TD_TYPE as jjywlb
+        from VC_FUNDS
+        where D_BIZ = to_date(#{pullDate},'yyyy-MM-dd HH:mi:ss') and C_ASSET_CODE = 'Z00295'
+        union
+        select
+           N_ID as jjcjbh,
+           to_char(D_TRADE_DATE,'yyyy-MM-dd') as jjdate,
+           C_ASSET_CODE as jjcpdm,
+           C_SEC_CODE as jjjjdm,
+           N_TD_MONEY as jjcjje,
+           N_TD_AMOUNT asjjcjsl,
+           0.0 as jjjyfy,
+           null as jjreln,
+           C_TD_TYPE as jjywlb
+        from VC_TRADE_EN
+        where D_TRADE_DATE = to_date(#{pullDate},'yyyy-MM-dd HH:mi:ss') and C_ASSET_CODE = 'Z00295'
+        union
+        select
+           C_TD_No as jjcjbh,
+           to_char(D_TRADE,'yyyy-MM-dd') as jjdate,
+           C_ASSET_CODE as jjcpdm,
+           C_SEC_CODE as jjjjdm,
+           N_TD_MONEY as JJCJJE,
+           N_TD_AMOUNT as JJCJSL,
+           0.0 as jjjyfy,
+           null as jjreln,
+           C_TD_TYPE as jjywlb
+        from VC_TRADE_SE
+        where D_TRADE = to_date(#{pullDate},'yyyy-MM-dd HH:mi:ss') and C_ASSET_CODE = 'Z00295'
+   </select>
+
+   <!--采集4.5估值系统 查询科目余额表数据-->
+   <select id="pullCourseBalance" parameterType="java.lang.String" resultType="com.yss.newexport.Entity.CourseBalanceVO">
+      select
+         C_YEAR || replace(lpad(N_PERIOD,2),' ','0')  as acctingPeroid,
+         C_ASSET_CODE as ptfId,
+         C_KM_CODE as coaId,
+         C_DC_CODE as ccyCd,
+         N_M_INI as initBalOccy,
+         N_M_DEB as currTermDbOccurncOccy,
+         N_M_CRE as currTermCrOccurncOccy,
+         N_M_DEB_Y as aggrDbOccurncOccy,
+         N_M_CRE_Y as aggrCrOccurncOccy,
+         N_M_BAL as teminalBalOccy,
+         N_A_INI as initQty,
+         N_A_DEB as currTermDbOccurQty,
+         N_A_CRE as currTermCrOccurQty,
+         N_A_DEB_Y as AggrDbOccurQty,
+         N_A_CRE_Y as AggrCrOccurQty,
+         N_A_BAL as TeminalQty,
+         N_PM_INI as initBalDccy,
+         N_PM_DEB as currTermDbOccurncDccy,
+         N_PM_CRE as currTermCrOccurncDccy,
+         N_PM_DEB_Y as aggrDbOccurncDccy,
+         N_PM_CRE_Y as aggrCrOccurncDccy,
+         N_PM_BAL as teminalBalDccy,
+         n_detail as nDetail
+      from
+         VN_BM_BAL
+      where
+          D_BIZ = to_date(#{pullDate},'yyyy-MM-dd HH:mi:ss')
+         and
+         C_ASSET_CODE = 'Z00295'
+   </select>
+
+   <!--采集4.5估值系统 查询科目表数据-->
+   <select id="pullCourseCode" parameterType="java.lang.String" resultType="com.yss.newexport.Entity.CourseCodeReportVO">
+       select
+           b.C_ASSET_CODE as ptfId,
+           a.C_Subj_CODE as coaId,
+           a.C_Subj_Name as coaName,
+           a.C_Subj_CODE_P as superCoaId,
+           a.C_SUBJ_LEVEL as coaLvl,
+           a.N_SUBJ_DETAIL as dtlCoaInd,
+           a.C_SUBJ_TYPE as  coaCatgCd,
+           a.C_DV_JD_WAY as coaDirCd,
+           a.C_DV_BOOL_TYPE_AM as acctingQtyInd,
+           to_char(b.D_BEGIN,'yyyy-MM-dd') as openDt,
+           to_char(b.D_END,'yyyy-MM-dd') as closeDt
+       from
+           VF_KMPLAN a
+           left join
+           VB_PORT_PLAN_RELA b
+           on a.C_PLAN_CODE = b.C_PLAN_CODE
+        where
+           b.C_ASSET_CODE = 'Z00295'
+   </select>
+
+   <!--采集4.5估值系统 查询估值数据-->
+   <select id="pullEval" parameterType="java.lang.String" resultType="com.yss.newexport.Entity.EvalReportVO">
+       select
+          to_char(D_BIZ,'yyyy-MM-dd') as evlDt,
+          C_ASSET_CODE as ptfId,
+          C_SUBJ_CODE as coaId,
+          C_CURY_CODE as ccyCd,
+          C_SUBJ_NAME as coaName,
+          C_SEC_CODE as secuCd,
+          C_MKT_CODE as exchangeCd,
+          N_HLDAMT as secuQty,
+          N_PRICE_COST as unitBuyCost,
+          N_HLDCST as costOccy,
+          N_HLDCST_LOCL as costDccy,
+          NULL  as costNavRatioOccy,
+          NULL  as costNavRatioDccy,
+          N_VALPRICE as evlPrc,
+          N_HLDMKV as mktValOccy,
+          N_HLDMKV_LOCL as mktValDccy,
+          NULL as mktNavRatioOccy,
+          NULL as mktNavRatioDccy,
+          N_HLDVVA as evlAprctOccy,
+          N_HLDVVA_L as evlAprctDccy,
+          NULL    as evlAprctNavRatioOccy,
+          NULL  as evlAprctCoaId,
+          '0' as isSumUnit
+       FROM
+           VN_FINANCIAL_VAL
+       where
+          D_BIZ = to_date(#{pullDate},'yyyy-MM-dd HH:mi:ss')
+          and
+          C_ASSET_CODE = 'Z00295'
+       UNION all
+         select
+             to_char(D_BIZ,'yyyy-MM-dd') as evlDt,
+             C_PORT_CODE as ptfId,
+             C_IDX_CODE as coaId,
+             C_CURY_CODE as ccyCd,
+             C_IDX_NAME  as coaName,
+             null as secuCd,
+             null as exchangeCd,
+             N_HLDAMT as secuQty,
+             null as unitBuyCost,
+             N_HLDCST as costOccy,
+             N_HLDCST_LOCL as costDccy,
+             null  as costNavRatioOccy,
+             null  as costNavRatioDccy,
+             0  as evlPrc,
+             N_HLDMKV as mktNavRatioOccy,
+             N_HLDMKV_LOCL as mktNavRatioDccy,
+             null as mktNavRatioOccy,
+             null as mktNavRatioDccy,
+             N_HLDVVA as evlAprctOccy,
+             N_HLDVVA_L as evlAprctDccy,
+             null as evlAprctNavRatioOccy,
+             null as evlAprctCoaId,
+             '1' as isSumUnit
+         from
+             VN_PORT_INDEX
+          where
+              D_BIZ = to_date(#{pullDate},'yyyy-MM-dd HH:mi:ss')
+              and
+              C_PORT_CODE = 'Z00295'
+              and C_IDX_CODE in ('ZCHJ','FZHJ','ZCJZ','SSZBJE','DWJZ','LJDWJZ')
+   </select>
+
+   <!--采集4.5估值系统 查询凭证表数据-->
+   <select id="pullVoucher" parameterType="java.lang.String" resultType="com.yss.newexport.Entity.VoucherReportVO">
+      SELECT
+         to_char(D_BIZ,'yyyy-MM-dd') as billDt,
+         C_VCH_NUM as vchNbr,
+         C_VCH_NUM_SUN as vchEntriesNbr,
+         C_ASSET_CODE as ptfId,
+         substr(to_char(D_BIZ,'yyyy-MM-dd'),0,4)||substr(to_char(D_BIZ,'yyyy-MM-dd'),6,2) as acctingPeroid,
+         C_SUBJ_CODE as coaId,
+         C_CURY_CODE as ccyCd,
+         N_RATE as exRate,
+         N_MONEY as txnAmtOccy,
+         N_MONEY_L as txnAmtDccy,
+         N_WAY as dbCrInd,
+         a.C_DT_CODE as vchSrcCd,
+         N_TD_AMOUNT as txnQty,
+         C_DVA_ITEM_CODE as vchSrcCd,
+         C_VCH_DESC as vchMemo,
+         C_MKT_CODE as marketCode,
+         C_SEC_VAR_MX as securityType
+      from
+         VF_VOUCHERDETAIL a
+         left join
+         VB_DVA_ITEM b
+         on a.C_DVA_ITEM_CODE = b.C_ITEM_CODE_P
+      where
+         D_BIZ = to_date(#{pullDate},'yyyy-MM-dd HH:mi:ss')
+         and
+         C_ASSET_CODE = 'Z00295'
+   </select>
+
+   <!--采集估值4.5，投资组合数据-->
+   <select id="pullInvest" parameterType="java.lang.String" resultType="com.yss.newexport.Entity.InvestReportVO">
+        select
+            C_ASSET_CODE as ptfId,
+            C_PORT_NAME_ST as ptfShortName,
+            C_PORT_NAME as ptfFullName
+        from
+           VB_PORT_BASEINFO
+        where
+            C_ASSET_CODE = 'Z00295'
+   </select>
+
+    <!--采集估值4.5系统，查询交易所清算表数据-->
+    <select id="pullExchange" parameterType="java.lang.String" resultType="com.yss.newexport.Entity.ExchangeClearReportVO">
+         select
+             to_char(a.D_TRADE_DATE,'yyyy-MM-dd') as qsdate,
+             to_char(a.D_BIZ,'yyyy-MM-dd') as qscrtd,
+             a.C_ASSET_CODE as qscpdm,
+             a.C_DV_TYPE_SUB as qsywbz,
+             a.C_SEC_CODE as qsgqdm,
+             a.C_MKT_CODE as qsmket,
+             b.C_SECMKT_CODE as qszqdm,
+             a.C_TDCHAN_CODE as qsxwdm,
+             a.C_DT_CODE as qsmmbz,
+             a.N_TD_AMOUNT as nTdAmount,
+             a.N_TD_MONEY as nTdMoney,
+             a.N_TD_INCOME as nTdIncome,
+             a.N_TD_YHS as qsfyhs,
+             a.N_TD_JSF as qsfjsf,
+             a.N_TD_ZGF as qsfzgf,
+             a.N_TD_GHF as qsfghg,
+             a.N_TD_JSFWF as qsfstf,
+             a.N_TD_FEE as qsfsxf,
+             a.N_STFXJ as qsffxj,
+             a.N_TD_COMM as qsfyjf,
+             a.C_TD_ATTR as qsjyfs,
+             a.C_SEC_VAR_MX as cSecVarMx,
+             a.C_DV_TYPE_SUB as cDvTypeSub
+         from
+             VC_TRADE a
+             LEFT JOIN
+             VB_SECURITY b
+             on a.C_SEC_CODE=b.C_SEC_CODE and a.C_MKT_CODE =b.C_MKT_CODE
+         where
+             a.D_TRADE_DATE = to_date(#{pullDate},'yyyy-MM-dd HH:mi:ss')
+             and
+             a.C_ASSET_CODE = 'Z00295'
+    </select>
+</mapper>

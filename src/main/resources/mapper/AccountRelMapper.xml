@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yss.newexport.dao.Local.IaccountRelDao">
+
+    <!--查询科目对照关系数据-->
+    <select id="queryAccountRel" parameterType="java.lang.String" resultType="com.yss.newexport.Entity.CourseRelVO">
+        select
+        src_Parent_Code as srcParentCode,
+        src_Course_Code as srcCourseCode,
+        target_Parent_Code as targetParentCode,
+        target_Course_Code as targetCourseCode,
+        target_Course_Code_Name as targetCourseCodeName,
+        target_Course_Account_Code as targetCourseAccountCode,
+        target_Course_Account_Code_Name as targetCourseAccountCodeName
+        from
+        Course_REL
+        <where>
+            C_ASSET_CODE = #{fundCode}
+        </where>
+    </select>
+
+    <!--查询源科目信息 -->
+    <select id="queryCourseCode" resultType="com.yss.newexport.Entity.CourseCodeReportVO">
+        select distinct  Coa_Id as coaId, Coa_Name as coaName  from temp_t04_coa order by Coa_Id
+    </select>
+
+    <!--查询目标科目信息 -->
+    <select id="queryKm" resultType="com.yss.newexport.Entity.KmVO">
+        select distinct  Km_Code as kmCode, Km_Name as kmName  from tb_km order by Km_Code
+    </select>
+
+    <!--查询账户信息 -->
+    <select id="queryAccount" resultType="com.yss.newexport.Entity.AccountVO">
+        select distinct  Account_Code as accountCode, Account_Name as accountName  from tb_account order by Account_Code
+    </select>
+
+    <!--查询科目信息byId-->
+    <select id="findCourseRelById" resultType="com.yss.newexport.Entity.CourseRelVO">
+        select ID as id , src_Parent_Code as srcParentCode,
+        src_Course_Code as srcCourseCode,src_Course_Code_Name as srcCourseCodeName,
+        target_Parent_Code as targetParentCode,target_Course_Code as targetCourseCode,
+        target_Course_Code_Name as targetCourseCodeName,src_Parent_Code_Name as srcParentCodeName,
+        target_Parent_Code_Name as targetParentCodeName,target_Course_Account_Code as targetCourseAccountCode,
+        target_Course_Account_Code_Name as targetCourseAccountCodeName
+        from Course_REL where ID= #{id}
+    </select>
+
+    <!--查询科目信息-->
+    <select id="queryKmMapping" resultType="com.yss.newexport.Entity.CourseRelVO">
+        select ID as id , src_Parent_Code as srcParentCode,
+        src_Course_Code as srcCourseCode,src_Course_Code_Name as srcCourseCodeName,
+        target_Parent_Code as targetParentCode,target_Course_Code as targetCourseCode,
+        target_Course_Code_Name as targetCourseCodeName,src_Parent_Code_Name as srcParentCodeName,
+        target_Parent_Code_Name as targetParentCodeName,target_Course_Account_Code as targetCourseAccountCode,
+        target_Course_Account_Code_Name as targetCourseAccountCodeName
+        from Course_REL where 1=1
+         <if test="flag != null" >
+             ORDER BY
+             <choose>
+                 <when test="flag == 'query'">
+                     target_Course_Code
+                 </when>
+                 <when test="flag == 'add'">
+                    ID desc
+                 </when>
+             </choose>
+         </if>
+    </select>
+    <!--保存-->
+    <insert id="saveKmMapping" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.yss.newexport.Entity.CourseRelVO">
+        insert into Course_REL (C_ASSET_CODE,src_Course_Code,src_Course_Code_Name,target_Course_Account_Code,target_Course_Account_Code_Name,target_Course_Code,target_Course_Code_Name,target_Parent_Code,target_Parent_Code_Name)
+        values(#{cAssetCode},#{srcCourseCode},#{srcCourseCodeName},#{targetCourseAccountCode},#{targetCourseAccountCodeName},#{targetCourseCode},#{targetCourseCodeName},#{targetParentCode},#{targetParentCodeName})
+    </insert>
+    <!--修改-->
+    <update id="updateKmMapping">
+        update Course_REL set src_Course_Code=#{srcCourseCode},src_Course_Code_Name=#{srcCourseCodeName},target_Course_Account_Code=#{targetCourseAccountCode},target_Course_Account_Code_Name=#{targetCourseAccountCodeName},
+        target_Course_Code=#{targetCourseCode}, target_Course_Code_Name=#{targetCourseCodeName}, target_Parent_Code=#{targetParentCode}, target_Parent_Code_Name=#{targetParentCodeName}
+        where Id= #{id}
+    </update>
+    <!--删除-->
+    <delete id="delKmMapping" parameterType="java.util.List">
+        delete from Course_REL where Id in
+        <foreach collection="list" item="id" open="(" separator="," close=")">#{id}
+        </foreach>
+    </delete>
+</mapper>

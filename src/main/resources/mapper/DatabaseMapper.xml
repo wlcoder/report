@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yss.newexport.dao.Local.IdatabaseDao">
+    <resultMap id="BaseResultMap" type="com.yss.newexport.Entity.DatabaseVO">
+        <id column="Id" jdbcType="INTEGER" property="id"/>
+        <result column="Ip" jdbcType="VARCHAR" property="ip"/>
+        <result column="Port" jdbcType="VARCHAR" property="port"/>
+        <result column="Instance_Name" jdbcType="VARCHAR" property="instanceName"/>
+        <result column="User_Name" jdbcType="VARCHAR" property="userName"/>
+        <result column="Pass_Word" jdbcType="VARCHAR" property="passWord"/>
+    </resultMap>
+
+    <!--查询-->
+    <select id="queryDatabase" resultMap="BaseResultMap">
+         select Id,Ip,Port,Instance_Name,User_Name,Pass_Word from yss_database
+    </select>
+    <!--保存-->
+    <insert id="saveDatabase" parameterType="com.yss.newexport.Entity.DatabaseVO">
+      insert into yss_database (Ip,Port,Instance_Name,User_Name,Pass_Word)values(#{ip},#{port},#{instanceName},#{userName},#{passWord})
+    </insert>
+    <!--修改-->
+    <update id="updateDatabase">
+        update yss_database set Ip=#{ip},Port=#{port},Instance_Name=#{instanceName},User_Name=#{userName},Pass_Word=#{passWord} where Id= #{id}
+    </update>
+    <!--删除-->
+    <delete id="delDatabase" parameterType="java.util.List">
+        delete from yss_database where Id in
+        <foreach collection="list" item="id" open="(" separator="," close=")">#{id}
+        </foreach>
+    </delete>
+</mapper>

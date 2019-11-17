@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yss.newexport.dao.Local.IdictionaryMappingDao">
+    <resultMap id="BaseResultMap" type="com.yss.newexport.Entity.DictionaryMappingVO">
+        <id column="Id" jdbcType="INTEGER" property="id"/>
+        <result column="Flag" jdbcType="VARCHAR" property="flag"/>
+        <result column="Source_Id" jdbcType="VARCHAR" property="sourceId"/>
+        <result column="Source_Val" jdbcType="VARCHAR" property="sourceVal"/>
+        <result column="Target_Id" jdbcType="VARCHAR" property="targetId"/>
+        <result column="Target_Val" jdbcType="VARCHAR" property="targetVal"/>
+    </resultMap>
+
+    <!--查询-->
+    <select id="queryDictionaryMapping" resultMap="BaseResultMap">
+         select Id,Flag,Source_Id,Source_Val,Target_Id,Target_Val from tb_dictionary_mapping
+    </select>
+    <!--保存-->
+    <insert id="saveDictionaryMapping" parameterType="com.yss.newexport.Entity.DatabaseVO">
+      insert into tb_dictionary_mapping (Flag,Source_Id,Source_Val,Target_Id,Target_Val)values(#{flag},#{sourceId},#{sourceVal},#{targetId},#{targetVal})
+    </insert>
+    <!--修改-->
+    <update id="updateDictionaryMapping">
+        update tb_dictionary_mapping set Flag=#{flag},Source_Id=#{sourceId},Source_Val=#{sourceVal},Target_Id=#{targetId},Target_Val=#{targetVal}
+        where Id= #{id}
+    </update>
+    <!--删除-->
+    <delete id="delDictionaryMapping" parameterType="java.util.List">
+        delete from tb_dictionary_mapping where Id in
+        <foreach collection="list" item="id" open="(" separator="," close=")">#{id}
+        </foreach>
+    </delete>
+</mapper>

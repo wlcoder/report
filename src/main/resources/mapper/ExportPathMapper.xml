@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yss.newexport.dao.Local.IexportPathDao">
+    <resultMap id="BaseResultMap" type="com.yss.newexport.Entity.ExportPathVO">
+        <id column="Id" jdbcType="INTEGER" property="id"/>
+        <result column="Path" jdbcType="VARCHAR" property="path"/>
+    </resultMap>
+
+    <!--查询-->
+    <select id="queryExportPath" resultMap="BaseResultMap">
+         select Id,Path from yss_export_path
+    </select>
+    <!--保存-->
+    <insert id="saveExportPath" parameterType="com.yss.newexport.Entity.ExportPathVO">
+      insert into yss_export_path (Path)values(#{path})
+    </insert>
+    <!--修改-->
+    <update id="updateExportPath">
+        update yss_export_path set Path=#{path} where Id= #{id}
+    </update>
+    <!--删除-->
+    <delete id="delExportPath" parameterType="java.util.List">
+        delete from yss_export_path where Id in
+        <foreach collection="list" item="id" open="(" separator="," close=")">#{id}
+        </foreach>
+    </delete>
+</mapper>

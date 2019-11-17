@@ -1,0 +1,1035 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yss.newexport.dao.Local.IgetLocalDataDao">
+    <delete id="deleteVoucherByCon" parameterType="java.lang.String">
+        delete
+        from
+        t04_fin_vch
+        where
+        Bill_Dt = str_to_date(#{ywdate},'%Y-%m-%d')
+        and
+        Ptf_Id = 'Z00295'
+    </delete>
+
+    <!--采集4.5估值系统 入库本地凭证表数据-->
+    <insert id="saveLocalVoucher" parameterType="java.util.List">
+        INSERT INTO t04_fin_vch
+        ( Bill_Dt,Vch_Nbr,
+        Vch_Entries_Nbr,
+        Ptf_Id,Accting_Peroid,
+        Vch_Catg,Coa_Id,Ccy_Cd,
+        Ex_Rate,Recnclt_Ind,Txn_Amt_Occy,
+        Txn_Amt_Dccy,Db_Cr_Ind,
+        Txn_Qty,Unit_Prc,
+        Vch_Src_Cd,Vch_Memo,
+        Occur_Dt,Bill_Tm,Accessory_Qty,
+        Posting_Ind,Secu_Txn_Mode,
+        Src_Ptf_Id,Assist_Accting_Cd,
+        Vch_Assoc_Nbr,In_Memo_Nbr,
+        Biz_Ref_Nbr,GMS_Vch_Nbr,
+        Remarks,Reserve1,
+        Reserve2,Bill_Usr_Id,
+        Chk_Usr_Id,Upd_Usr_Id,
+        Posting_Usr_Id,Cfm_Usr_Id,
+        Bond_Cd,Exchange_Cd
+        )VALUES
+        <foreach collection="vochlist" index="index" item="item" separator=",">
+            (
+            <choose>
+                <when test="item.billDt != null and item.billDt !=''">
+                    str_to_date(#{item.billDt},'%Y-%m-%d'),
+                </when>
+                <otherwise>
+                    #{item.billDt},
+                </otherwise>
+            </choose>
+            #{item.vchNbr},
+            #{item.vchEntriesNbr},
+            #{item.ptfId},
+            #{item.acctingPeroid},
+            #{item.vchCatg},
+            #{item.coaId},
+            #{item.ccyCd},
+            #{item.exRate},
+            #{item.recncltInd},
+            #{item.txnAmtOccy},
+            #{item.txnAmtDccy},
+            #{item.dbCrInd},
+            #{item.txnQty},
+            #{item.unitPrc},
+            #{item.vchSrcCd},
+            #{item.vchMemo},
+            <choose>
+                <when test="item.occurDt != null and item.occurDt !=''">
+                    str_to_date(#{item.occurDt},'%Y-%m-%d'),
+                </when>
+                <otherwise>
+                    #{item.occurDt},
+                </otherwise>
+            </choose>
+
+            NULL,
+            #{item.accessoryQty},
+            #{item.postingInd},
+            #{item.secuTxnMode},
+            #{item.srcPtfId},
+            #{item.assistAcctingCd},
+            #{item.vchAssocNbr},
+            #{item.inMemoNbr},
+            #{item.bizRefNbr},
+            #{item.gmsVchNbr},
+            #{item.remarks},
+            #{item.reserve1},
+            #{item.reserve2},
+            #{item.billUsrId},
+            #{item.chkUsrId},
+            #{item.updUsrId},
+            #{item.postingUsrId},
+            #{item.cfmUsrId},
+            #{item.bondCd},
+            #{item.exchangeCd}
+            )
+        </foreach>
+    </insert>
+
+    <select id="queryTempVoucherByCon" parameterType="java.lang.String"
+            resultType="com.yss.newexport.Entity.VoucherReportVO">
+        SELECT
+          date_format(Bill_Dt,'%Y-%m-%d') as billDt,
+          Vch_Nbr as vchNbr,
+          Vch_Entries_Nbr as vchEntriesNbr,
+          Ptf_Id as ptfId,
+          Accting_Peroid as acctingPeroid,
+          Vch_Catg as vchCatg,
+          Coa_Id as coaId,
+          Ccy_Cd as ccyCd,
+          Ex_Rate as exRate,
+          Recnclt_Ind as recncltInd,
+          Txn_Amt_Occy as txnAmtOccy,
+          Txn_Amt_Dccy as txnAmtDccy,
+          Db_Cr_Ind as dbCrInd,
+          Txn_Qty as txnQty,
+          Unit_Prc as unitPrc,
+          Vch_Src_Cd as vchSrcCd,
+          Vch_Memo as vchMemo,
+          date_format(Occur_Dt,'%Y-%m-%d') as occurDt,
+          Bill_Tm as billTm,
+          Posting_Ind as postingInd,
+          Secu_Txn_Mode as secuTxnMode,
+          Src_Ptf_Id as srcPtfId,
+          Assist_Accting_Cd as assistAcctingCd,
+          Vch_Assoc_Nbr as vchAssocNbr,
+          In_Memo_Nbr as inMemoNbr,
+          Biz_Ref_Nbr as bizRefNbr,
+          GMS_Vch_Nbr as gmsVchNbr,
+          Remarks as remarks,
+          Reserve1 as reserve1,
+          Reserve2 as reserve2,
+          Bill_Usr_Id as billUsrId,
+          Chk_Usr_Id as chkUsrId,
+          Upd_Usr_Id as updUsrId,
+          Posting_Usr_Id as postingUsrId,
+          Cfm_Usr_Id as cfmUsrId,
+          Bond_Cd as bondCd,
+          Exchange_Cd as exchangeCd,
+          Security_type as securityType,
+          Market_Code as marketCode
+        from
+           TEMP_T04_FIN_VCH
+        where
+           Bill_Dt = str_to_date(#{ywdate},'%Y-%m-%d')
+           and
+           Ptf_Id = 'Z00295'
+           ORDER BY  Vch_Nbr,Coa_Id
+    </select>
+
+
+    <!--删除估值数据-->
+    <delete id="deleteEvalByCon" parameterType="java.lang.String">
+        delete
+        from
+        T04_FIN_EVL
+        where
+        Evl_Dt = str_to_date(#{ywdate},'%Y-%m-%d')
+        and
+        Ptf_Id = 'Z00295'
+    </delete>
+
+    <!--查询当日净值-->
+    <select id="queryFundInvest" parameterType="java.lang.String" resultType="com.yss.newexport.Entity.EvalReportVO">
+          select
+              Cost_Dccy as costDccy,
+              Mkt_Val_Dccy as mktValDccy,
+              Evl_Aprct_Dccy as evlAprctDccy
+          FROM
+              TEMP_T04_FIN_EVL
+          where
+               Evl_Dt = str_to_date(#{ywdate},'%Y-%m-%d')
+               and
+               Ptf_Id = 'Z00295'
+               AND
+               Coa_Id = 'ZCJZ'
+    </select>
+
+
+
+    <insert id="saveLocalEval" parameterType="java.util.List">
+        insert INTO T04_FIN_EVL
+        (
+        Evl_Dt,Ptf_Id,
+        Coa_Id,Ccy_Cd,
+        Coa_Name,Secu_Cd,
+        Exchange_Cd,Secu_Qty,
+        Unit_Buy_Cost,Cost_Occy,
+        Cost_Dccy, Cost_Nav_Ratio_Occy,
+        Cost_Nav_Ratio_Dccy,Evl_Prc,
+        Mkt_Evl_Method_Cd, Mkt_Val_Occy,
+        Mkt_Val_Dccy,Mkt_Nav_Ratio_Occy,
+        Mkt_Nav_Ratio_Dccy,Evl_Aprct_Occy,
+        Evl_Aprct_Dccy,Evl_Aprct_Nav_Ratio_Occy,
+        Evl_Aprct_Coa_Id,Base_Ex_Rate,
+        Ptf_Ex_Rate,Convert_Profit_Loss,
+        Rights_Info,Mkt_Desc,
+        Origin_Secu_Cd,is_Sum_Unit
+        ) VALUES
+        <foreach collection="evallist" index="index" item="item" separator=",">
+            (
+            <choose>
+                <when test="item.evlDt != null and item.evlDt !=''">
+                    str_to_date(#{item.evlDt},'%Y-%m-%d'),
+                </when>
+                <otherwise>
+                    #{item.evlDt},
+                </otherwise>
+            </choose>
+            #{item.ptfId},
+            #{item.coaId},
+            #{item.ccyCd},
+            #{item.coaName},
+            #{item.secuCd},
+            #{item.exchangeCd},
+            #{item.secuQty},
+            #{item.unitBuyCost},
+            #{item.costOccy},
+            #{item.costDccy},
+            #{item.costNavRatioOccy},
+            #{item.costNavRatioDccy},
+            #{item.evlPrc},
+            #{item.mktEvlMethodCd},
+            #{item.mktValOccy},
+            #{item.mktValDccy},
+            #{item.mktNavRatioOccy},
+            #{item.mktNavRatioDccy},
+            #{item.evlAprctOccy},
+            #{item.evlAprctDccy},
+            #{item.evlAprctNavRatioOccy},
+            #{item.evlAprctCoaId},
+            #{item.baseExRate},
+            #{item.ptfExRate},
+            #{item.convertProfitLoss},
+            #{item.rightsInfo},
+            #{item.mktDesc},
+            #{item.originSecuCd},
+            #{item.isSumUnit}
+            )
+        </foreach>
+    </insert>
+
+    <select id="queryTempEvalByCon" parameterType="java.lang.String"
+            resultType="com.yss.newexport.Entity.EvalReportVO">
+        SELECT
+        date_format(Evl_Dt,'%Y-%m-%d') as evlDt,
+        Ptf_Id as ptfId,
+        Coa_Id as coaId,
+        Ccy_Cd as ccyCd,
+        Coa_Name as coaName,
+        Secu_Cd as secuCd,
+        Exchange_Cd as exchangeCd,
+        Secu_Qty as secuQty,
+        Unit_Buy_Cost as unitBuyCost,
+        Cost_Occy as costOccy,
+        Cost_Dccy as costDccy,
+        Cost_Nav_Ratio_Occy as costNavRatioOccy,
+        Cost_Nav_Ratio_Dccy as costNavRatioDccy,
+        Evl_Prc as evlPrc,
+        Mkt_Evl_Method_Cd as mktEvlMethodCd,
+        Mkt_Val_Occy as mktValOccy,
+        Mkt_Val_Dccy as mktValDccy,
+        Mkt_Nav_Ratio_Occy as mktNavRatioOccy,
+        Mkt_Nav_Ratio_Dccy as mktNavRatioDccy,
+        Evl_Aprct_Occy as evlAprctOccy,
+        Evl_Aprct_Dccy as evlAprctDccy,
+        Evl_Aprct_Nav_Ratio_Occy as evlAprctNavRatioOccy,
+        Evl_Aprct_Coa_Id as evlAprctCoaId,
+        Base_Ex_Rate as baseExRate,
+        Ptf_Ex_Rate as ptfExRate,
+        Convert_Profit_Loss as convertProfitLoss,
+        Rights_Info as rightsInfo,
+        Mkt_Desc as mktDesc,
+        Origin_Secu_Cd as originSecuCd,
+        IS_SUM_UNIT as isSumUnit
+        from
+           TEMP_T04_FIN_EVL
+        where
+        Evl_Dt = str_to_date(#{ywdate},'%Y-%m-%d')
+        and
+        Ptf_Id = 'Z00295'
+        order by Coa_Id
+    </select>
+
+
+    <delete id="deleteCourseCode" parameterType="java.lang.String">
+        delete  from T04_COA
+    </delete>
+
+
+    <insert id="saveCourseCode" parameterType="java.util.List">
+        INSERT into T04_COA
+        (
+        Ptf_Id,Coa_Id,
+        Coa_Name,Super_Coa_Id,
+        Coa_Lvl,Dtl_Coa_Ind,
+        Coa_Catg_Cd,Coa_Attr,
+        Coa_Dir_Cd,Ccy_Cd,
+        Accting_Qty_Ind,Sum_Qty_Tfr_Ind,
+        Open_Dt,Close_Dt,
+        Usable_Ind,Secu_Cd,
+        Exchange_Cd,Inv_Type_Cd,
+        En_Name,Assist_Accting_Cd
+        )values
+        <foreach collection="courselist" index="index" item="item" separator=",">
+            (
+            #{item.ptfId},
+            #{item.coaId},
+            #{item.coaName},
+            #{item.superCoaId},
+            #{item.coaLvl},
+            #{item.dtlCoaInd},
+            #{item.coaCatgCd},
+            #{item.coaAttr},
+            #{item.coaDirCd},
+            #{item.ccyCd},
+            #{item.acctingQtyInd},
+            #{item.sumQtyTfrInd},
+            <choose>
+                <when test="item.openDt != null and item.openDt !=''">
+                    str_to_date(#{item.openDt},'%Y-%m-%d'),
+                </when>
+                <otherwise>
+                    #{item.openDt},
+                </otherwise>
+            </choose>
+
+            <choose>
+                <when test="item.closeDt != null and item.closeDt !=''">
+                    str_to_date(#{item.closeDt},'%Y-%m-%d'),
+                </when>
+                <otherwise>
+                    #{item.closeDt},
+                </otherwise>
+            </choose>
+            #{item.usableInd},
+            #{item.secuCd},
+            #{item.exchangeCd},
+            #{item.invTypeCd},
+            #{item.enName},
+            #{item.assistAcctingCd}
+            )
+        </foreach>
+    </insert>
+
+    <select id="queryTempCourseCode" parameterType="java.lang.String"
+            resultType="com.yss.newexport.Entity.CourseCodeReportVO">
+        SELECT
+        Ptf_Id as ptfId,
+        Coa_Id as coaId,
+        Coa_Name as coaName,
+        Super_Coa_Id as superCoaId,
+        Coa_Lvl as coaLvl,
+        Dtl_Coa_Ind as dtlCoaInd,
+        Coa_Catg_Cd as coaCatgCd,
+        Coa_Attr as coaAttr,
+        Coa_Dir_Cd as coaDirCd,
+        Ccy_Cd as ccyCd,
+        Accting_Qty_Ind as acctingQtyInd,
+        Sum_Qty_Tfr_Ind as sumQtyTfrInd,
+        date_format(Open_Dt,'%Y-%m-%d') as openDt,
+        date_format(Close_Dt,'%Y-%m-%d') as closeDt,
+        Usable_Ind as usableInd,
+        Secu_Cd as secuCd,
+        Exchange_Cd as exchangeCd,
+        Inv_Type_Cd as invTypeCd,
+        En_Name as enName,
+        Assist_Accting_Cd as assistAcctingCd
+        from
+          Temp_T04_COA;
+    </select>
+
+
+    <!--删除余额表数据-->
+    <delete id="deleteCourseBalance" parameterType="java.lang.String">
+        DELETE  from  T04_COA_GL_BAL
+        where
+        Accting_Peroid = CONCAT(substr(#{ywdate},1,4),substr(#{ywdate},6,2))
+        and
+        Ptf_Id = 'Z00295'
+    </delete>
+
+    <!--保存余额表数据-->
+    <insert id="saveCourseBalance" parameterType="java.util.List">
+        insert into T04_COA_GL_BAL
+        (
+        Accting_Peroid,Ptf_Id,
+        Coa_Id,Ccy_Cd,
+        init_Bal_Occy,Curr_Term_Db_Occurnc_Occy,
+        Curr_Term_Cr_Occurnc_Occy,Aggr_Db_Occurnc_Occy,
+        Aggr_Cr_Occurnc_Occy,Teminal_Bal_Occy,
+        init_Qty,Curr_Term_Db_Occur_Qty,
+        Curr_Term_Cr_Occur_Qty,Aggr_Db_Occur_Qty,
+        Aggr_Cr_Occur_Qty,Teminal_Qty,
+        init_Bal_Dccy,Curr_Term_Db_Occurnc_Dccy,
+        Curr_Term_Cr_Occurnc_Dccy,Aggr_Db_Occurnc_Dccy,
+        Aggr_Cr_Occurnc_Dccy,Teminal_Bal_Dccy,
+        Assist_Accting_Cd
+        )VALUES
+        <foreach collection="balancelist" index="index" item="item" separator=",">
+            (
+            #{item.acctingPeroid},
+            #{item.ptfId},
+            #{item.coaId},
+            #{item.ccyCd},
+            #{item.initBalOccy},
+            #{item.currTermDbOccurncOccy},
+            #{item.currTermCrOccurncOccy},
+            #{item.aggrDbOccurncOccy},
+            #{item.aggrCrOccurncOccy},
+            #{item.teminalBalOccy},
+            #{item.initQty},
+            #{item.currTermDbOccurQty},
+            #{item.currTermCrOccurQty},
+            #{item.aggrDbOccurQty},
+            #{item.aggrCrOccurQty},
+            #{item.teminalQty},
+            #{item.initBalDccy},
+            #{item.currTermDbOccurncDccy},
+            #{item.currTermCrOccurncDccy},
+            #{item.aggrDbOccurncDccy},
+            #{item.aggrCrOccurncDccy},
+            #{item.teminalBalDccy},
+            #{item.assistAcctingCd}
+            )
+        </foreach>
+    </insert>
+
+    <select id="queryTempCourseBalance" parameterType="java.lang.String"
+            resultType="com.yss.newexport.Entity.CourseBalanceVO">
+        SELECT
+        Accting_Peroid as acctingPeroid,
+        Ptf_Id as ptfId,
+        Coa_Id as coaId,
+        Ccy_Cd as ccyCd,
+        init_Bal_Occy as initBalOccy,
+        Curr_Term_Db_Occurnc_Occy as currTermDbOccurncOccy,
+        Curr_Term_Cr_Occurnc_Occy as currTermCrOccurncOccy,
+        Aggr_Db_Occurnc_Occy as aggrDbOccurncOccy,
+        Aggr_Cr_Occurnc_Occy as aggrCrOccurncOccy,
+        Teminal_Bal_Occy as teminalBalOccy,
+        init_Qty as initQty,
+        Curr_Term_Db_Occur_Qty as currTermDbOccurQty,
+        Curr_Term_Cr_Occur_Qty as currTermCrOccurQty,
+        Aggr_Db_Occur_Qty as aggrDbOccurQty,
+        Aggr_Cr_Occur_Qty as aggrCrOccurQty,
+        Teminal_Qty as teminalQty,
+        init_Bal_Dccy as initBalDccy,
+        Curr_Term_Db_Occurnc_Dccy as currTermDbOccurncDccy,
+        Curr_Term_Cr_Occurnc_Dccy as currTermCrOccurncDccy,
+        Aggr_Db_Occurnc_Dccy as aggrDbOccurncDccy,
+        Aggr_Cr_Occurnc_Dccy as aggrCrOccurncDccy,
+        Teminal_Bal_Dccy as teminalBalDccy,
+        Assist_Accting_Cd as assistAcctingCd
+        from
+          TEMP_T04_COA_GL_BAL
+        where
+         Accting_Peroid = CONCAT(substr(#{ywdate},1,4),substr(#{ywdate},6,2))
+        and
+         Ptf_Id = 'Z00295'
+        AND
+          n_detail = '1'
+        ORDER BY Coa_Id
+    </select>
+
+
+    <delete id="deleteBankDeposit" parameterType="java.lang.String">
+        delete from T05_BANK_DEP_TXN
+        where
+        Ptf_Id = 'Z00295'
+        AND
+        Start_Dt &gt;= str_to_date(#{pullDate},'%Y-%m-%d')
+        AND
+        End_Dt  &lt;= str_to_date(#{pullDate},'%Y-%m-%d')
+    </delete>
+
+    <insert id="saveBankDeposit" parameterType="com.yss.newexport.Entity.BankDepositReportVO">
+        insert into T05_BANK_DEP_TXN
+        (
+        Bargain_Id,Ptf_Id,
+        Dep_Recpt_Id,Start_Dt,
+        End_Dt,Dep_Biz_Type_Cd,
+        With_In_Adv_Ind,Saving_Dep_Acct_Id,
+        Regular_Dep_Acct_Id,Int_Db_Acct_Id,
+        Int_Cr_Acct_Id,Dep_Amt,
+        Dep_Retns,Dep_Bank_Name,
+        Dep_Int_Rate,With_In_Adv_Int_Loss_Ind,
+        Accrued_Mode_Cd,Fix_Dep_Cal_Int_Mode_Cd,
+        Fix_Dep_Int_Rate_Type_Cd,Adj_Int_Mode_Cd,
+        Pay_Int_Mode_Cd,With_In_Adv_Remarks,
+        Branch,Cal_Int_Days,
+        Agr_Dep_lmt,Agr_Dep_Int_Rate,
+        FixPP_Amt,FixPP_Int_Rate,
+        FixPP_Dep_Amt_Rela_Cd,Dep_Notice_Days,
+        Due_Dt_Enable_Ind,Amt_Split,
+        Withdraw_Dt,Hook_Type,
+        Cal_Int_Type_Cd,Dep_Type_Cd,
+        Pndg,Reserve_Int_Rate,
+        Cal_Int_Base,Float_Cal_Int_Ind,
+        Bank_Acct_Id,Base_Ex_Rate,
+        Ptf_Ex_Rate,Hdl_User_Id,
+        Chk_Usr_Id,Chk_Stat_Cd
+        ) values
+        <foreach collection="bankdeposlist" index="index" item="item" separator=",">
+            (
+            #{item.bargainId},
+            #{item.ptfId},
+            #{item.depRecptId},
+            <choose>
+                <when test="item.startDt != null and item.startDt !=''">
+                    str_to_date(#{item.startDt},'%Y-%m-%d'),
+                </when>
+                <otherwise>
+                    #{item.startDt},
+                </otherwise>
+            </choose>
+
+            <choose>
+                <when test="item.endDt != null and item.endDt !=''">
+                    str_to_date(#{item.endDt},'%Y-%m-%d'),
+                </when>
+                <otherwise>
+                    #{item.endDt},
+                </otherwise>
+            </choose>
+            #{item.depBizTypeCd},
+            #{item.withInAdvInd},
+            #{item.savingDepAcctId},
+            #{item.regularDepAcctId},
+            #{item.intDbAcctId},
+            #{item.intCrAcctId},
+            #{item.depAmt},
+            #{item.depRetns},
+            #{item.depBankName},
+            #{item.depIntRate},
+            #{item.withInAdvIntLossInd},
+            #{item.accruedModeCd},
+            #{item.fixDepCalIntModeCd},
+            #{item.fixDepIntRateTypeCd},
+            #{item.adjIntModeCd},
+            #{item.payIntModeCd},
+            #{item.withInAdvRemarks},
+            #{item.branch},
+            #{item.calIntDays},
+            #{item.agrDepLmt},
+            #{item.agrDepIntRate},
+            #{item.fixppAmt},
+            #{item.fixppIntRate},
+            #{item.fixppDepAmtRelaCd},
+            #{item.depNoticeDays},
+            #{item.dueDtEnableInd},
+            #{item.amtSplit},
+            #{item.withdrawDt},
+            #{item.hookType},
+            #{item.calIntTypeCd},
+            #{item.depTypeCd},
+            #{item.pndg},
+            #{item.reserveIntRate},
+            #{item.calIntBase},
+            #{item.floatCalIntInd},
+            #{item.bankAcctId},
+            #{item.baseExRate},
+            #{item.ptfExRate},
+            #{item.hdlUserId},
+            #{item.chkUsrId},
+            #{item.chkStatCd}
+            )
+        </foreach>
+    </insert>
+
+    <select id="queryTempBankDeposit" parameterType="java.lang.String"
+            resultType="com.yss.newexport.Entity.BankDepositReportVO">
+        SELECT
+        Bargain_Id as bargainId,
+        Ptf_Id as ptfId,
+        Dep_Recpt_Id as depRecptId,
+        date_format(Start_Dt,'%Y-%m-%d') as startDt,
+        date_format(End_Dt,'%Y-%m-%d') as endDt,
+        Dep_Biz_Type_Cd as depBizTypeCd,
+        With_In_Adv_Ind as withInAdvInd,
+        Saving_Dep_Acct_Id as savingDepAcctId,
+        Regular_Dep_Acct_Id as regularDepAcctId,
+        Int_Db_Acct_Id as intDbAcctId,
+        Int_Cr_Acct_Id as intCrAcctId,
+        Dep_Amt as depAmt,
+        Dep_Retns as depRetns,
+        Dep_Bank_Name as depBankName,
+        Dep_Int_Rate as depIntRate,
+        With_In_Adv_Int_Loss_Ind as withInAdvIntLossInd,
+        Accrued_Mode_Cd as accruedModeCd,
+        Fix_Dep_Cal_Int_Mode_Cd as fixDepCalIntModeCd,
+        Fix_Dep_Int_Rate_Type_Cd as fixDepIntRateTypeCd,
+        Adj_Int_Mode_Cd as adjIntModeCd,
+        Pay_Int_Mode_Cd as payIntModeCd,
+        With_In_Adv_Remarks as withInAdvRemarks,
+        Branch as branch,
+        Cal_Int_Days as calIntDays,
+        Agr_Dep_lmt as agrDeplmt,
+        Agr_Dep_Int_Rate as agrDepIntRate,
+        FixPP_Amt as fixppAmt,
+        FixPP_Int_Rate as fixppIntRate,
+        FixPP_Dep_Amt_Rela_Cd as fixppDepAmtRelaCd,
+        Dep_Notice_Days as depNoticeDays,
+        Due_Dt_Enable_Ind as dueDtEnableInd,
+        Amt_Split as amtSplit,
+        Withdraw_Dt as withdrawDt,
+        Hook_Type as hookType,
+        Cal_Int_Type_Cd as calIntTypeCd,
+        Dep_Type_Cd as depTypeCd,
+        Pndg as pndg,
+        Reserve_Int_Rate as reserveIntRate,
+        Cal_Int_Base as calIntBase,
+        Float_Cal_Int_Ind as floatCalIntInd,
+        Bank_Acct_Id as bankAcctId,
+        Base_Ex_Rate as baseExRate,
+        Ptf_Ex_Rate as ptfExRate,
+        Hdl_User_Id as hdlUserId,
+        Chk_Usr_Id as chkUsrId,
+        Chk_Stat_Cd as chkStatCd
+        from
+            TEMP_T05_BANK_DEP_TXN
+        where PTF_ID = 'Z00295'
+        AND
+        Start_Dt &gt;= str_to_date(#{ywdate},'%Y-%m-%d')
+        AND
+        End_Dt  &lt;= str_to_date(#{ywdate},'%Y-%m-%d')
+    </select>
+
+
+    <delete id="deleteFund" parameterType="java.lang.String">
+        DELETE  from EVLJJ
+        where  JJDATE = str_to_date(#{pullDate},'%Y-%m-%d')
+        and JJCPDM = 'Z00295'
+    </delete>
+
+
+    <insert id="saveFund" parameterType="java.util.List">
+        insert into EVLJJ
+        (
+        JJCJBH,
+        JJDATE,
+        JJCPDM,
+        JJYWLB,
+        JJJJDM,
+        JJCJJE,
+        JJCJSL,
+        JJJYFY,
+        JJQJLX,
+        JJZJZH,
+        JJJZFS,
+        JJRELN,
+        JJHLJZ,
+        JJJUSR,
+        JJSUSR,
+        JJSTAT
+        )VALUES
+        <foreach collection="fundlist" index="index" item="item" separator=",">
+            (
+            #{item.jjcjbh},
+            <choose>
+                <when test="item.jjdate != null and item.jjdate !=''">
+                    str_to_date(#{item.jjdate},'%Y-%m-%d'),
+                </when>
+                <otherwise>
+                    #{item.jjdate},
+                </otherwise>
+            </choose>
+            #{item.jjcpdm},
+            #{item.jjywlb},
+            #{item.jjjjdm},
+            #{item.jjcjje},
+            #{item.jjcjsl},
+            #{item.jjjyfy},
+            #{item.jjqjlx},
+            #{item.jjzjzh},
+            #{item.jjjzfs},
+            #{item.jjreln},
+            #{item.jjhljz},
+            #{item.jjjusr},
+            #{item.jjsusr},
+            #{item.jjstat}
+            )
+        </foreach>
+    </insert>
+
+    <select id="queryTempFund" parameterType="java.lang.String"
+            resultType="com.yss.newexport.Entity.FundBusinessReportVO">
+        SELECT
+        JJCJBH,
+        date_format(JJDATE,'%Y-%m-%d') as JJDATE,
+        JJCPDM,
+        JJYWLB,
+        JJJJDM,
+        JJCJJE,
+        JJCJSL,
+        JJJYFY,
+        JJQJLX,
+        JJZJZH,
+        JJJZFS,
+        JJRELN,
+        JJHLJZ,
+        JJJUSR,
+        JJSUSR,
+        JJSTAT
+        from
+          TEMP_EVLJJ
+        where
+            JJDATE = str_to_date(#{ywdate},'%Y-%m-%d')
+            and
+            JJCPDM = 'Z00295'
+    </select>
+
+
+    <delete id="deleteInvest" parameterType="java.lang.String">
+        delete from T02_PTF
+    </delete>
+
+    <insert id="saveInvest" parameterType="com.yss.newexport.Entity.InvestReportVO">
+        insert into T02_PTF
+        (
+        ptf_id,
+        ptf_short_name,
+        ptf_full_name
+        )VALUES
+        <foreach collection="investlist" index="index" item="item" separator=",">
+            (
+            #{item.ptfId},
+            #{item.ptfShortName},
+            #{item.ptfFullName}
+            )
+        </foreach>
+    </insert>
+
+    <select id="queryTempInvest" parameterType="java.lang.String"
+            resultType="com.yss.newexport.Entity.InvestReportVO">
+        SELECT
+        ptf_id as ptfId,
+        ptf_short_name as ptfShortName,
+        ptf_full_name as ptfFullName
+        from
+          TEMP_T02_PTF;
+    </select>
+
+    <delete id="deleteExchange" parameterType="java.lang.String">
+        delete from JYSQS where QSDATE = str_to_date(#{pullDate},'%Y-%m-%d')
+        and QSCPDM = 'Z00295'
+    </delete>
+
+    <insert id="saveExchange" parameterType="com.yss.newexport.Entity.ExchangeClearReportVO">
+        INSERT into JYSQS
+        (
+        QSDATE,QSCRTD,
+        QSCPDM,QSYWBZ,
+        QSGQDM,QSMKET,
+        QSZQDM,QSXWDM,
+        QSMMBZ,QSCJSL,
+        QSCJJE,QSLXSY,
+        QSFYHS,QSFJSF,
+        QSFZGF,QSFGHF,
+        QSFSTF,QSFSXF,
+        QSFFXJ,QSFYJF,
+        QSJYFS,QSZHXX
+        )values
+        <foreach collection="exchangelist" index="index" item="item" separator=",">
+            (
+            <choose>
+                <when test="item.qsdate != null and item.qsdate !=''">
+                    str_to_date(#{item.qsdate},'%Y-%m-%d'),
+                </when>
+                <otherwise>
+                    #{item.qsdate},
+                </otherwise>
+            </choose>
+
+            <choose>
+                <when test="item.qscrtd != null and item.qscrtd !=''">
+                    str_to_date(#{item.qscrtd},'%Y-%m-%d'),
+                </when>
+                <otherwise>
+                    #{item.qscrtd},
+                </otherwise>
+            </choose>
+            #{item.qscpdm},
+            #{item.qsywbz},
+            #{item.qsgqdm},
+            #{item.qsmket},
+            #{item.qszqdm},
+            #{item.qsxwdm},
+            #{item.qsmmbz},
+            #{item.qscjsl},
+            #{item.qscjje},
+            #{item.qslxsy},
+            #{item.qsfyhs},
+            #{item.qsfjsf},
+            #{item.qsfzgf},
+            #{item.qsfghf},
+            #{item.qsfstf},
+            #{item.qsfsxf},
+            #{item.qsffxj},
+            #{item.qsfyjf},
+            #{item.qsjyfs},
+            #{item.qszhxx}
+            )
+        </foreach>
+    </insert>
+
+    <select id="queryTempExchange" parameterType="java.lang.String"
+            resultType="com.yss.newexport.Entity.ExchangeClearReportVO">
+        SELECT
+        date_format(QSDATE,'%Y-%m-%d') as QSDATE,
+        date_format(QSCRTD,'%Y-%m-%d') as QSCRTD,
+        QSCPDM,
+        QSYWBZ,
+        QSGQDM,
+        QSMKET,
+        QSZQDM,
+        QSXWDM,
+        QSMMBZ,
+        QSCJSL,
+        QSCJJE,
+        QSLXSY,
+        QSFYHS,
+        QSFJSF,
+        QSFZGF,
+        QSFGHF,
+        QSFSTF,
+        QSFSXF,
+        QSFFXJ,
+        QSFYJF,
+        QSJYFS,
+        QSSEQN,
+        QSSTAT,
+        QSZHXX,
+        C_SEC_VAR_MX as cSecVarMx,
+        C_DV_TYPE_SUB as cDvTypeSub
+        from
+           TEMP_JYSQS
+        where
+            QSDATE = str_to_date(#{ywdate},'%Y-%m-%d')
+           and
+            QSCPDM = 'Z00295'
+    </select>
+
+    <delete id="deleteBankSecurity" parameterType="java.lang.String">
+        delete from  YHJZQ
+        where YZDATE = str_to_date(#{pullDate},'%Y-%m-%d')
+        and YZCPDM = 'Z00295'
+    </delete>
+
+    <insert id="saveBankSecurity" parameterType="com.yss.newexport.Entity.BankSecurityReportVO">
+        insert into YHJZQ
+        (
+        YZCPDM,YZCJBH,
+        YZDATE,YZJSJG,
+        YZJGRQ,YZZQDM,
+        YZZQLB,YZLVLX,
+        YZPMJE,YZZJZH,
+        YZJYLX,YZJJJE,
+        YZSHLX,YZCJSL,
+        YZFSXF,YZFGHF,
+        YZFYHF,YZGLFN,
+        YZJUSR,YZSUSR,
+        YZSTAT
+        )VALUES
+        <foreach collection="banksecuritylist" index="index" item="item" separator=",">
+            (
+            #{item.yzcpdm},
+            #{item.yzcjbh},
+            <choose>
+                <when test="item.yzdate != null and item.yzdate !=''">
+                    str_to_date( #{item.yzdate},'%Y-%m-%d'),
+                </when>
+                <otherwise>
+                    #{item.yzdate},
+                </otherwise>
+            </choose>
+            #{item.yzjsjg},
+            <choose>
+                <when test="item.yzjgrq != null and item.yzjgrq !=''">
+                    str_to_date(#{item.yzjgrq},'%Y-%m-%d'),
+                </when>
+                <otherwise>
+                    #{item.yzjgrq},
+                </otherwise>
+            </choose>
+            #{item.yzzqdm},
+            #{item.yzzqlb},
+            #{item.yzlvlx},
+            #{item.yzpmje},
+            #{item.yzzjzh},
+            #{item.yzjylx},
+            #{item.yzjjje},
+            #{item.yzshlx},
+            #{item.yzcjsl},
+            #{item.yzfsxf},
+            #{item.yzfghf},
+            #{item.yzfyhf},
+            #{item.yzglfn},
+            #{item.yzjusr},
+            #{item.yzsusr},
+            #{item.yzstat}
+            )
+        </foreach>
+    </insert>
+
+    <select id="queryTempBankSecurity" parameterType="java.lang.String"
+            resultType="com.yss.newexport.Entity.BankSecurityReportVO">
+        SELECT
+        YZCPDM ,
+        YZCJBH ,
+        date_format(YZDATE,'%Y-%m-%d') as YZDATE,
+        YZJSJG ,
+        date_format(YZJGRQ,'%Y-%m-%d') as YZJGRQ,
+        YZZQDM ,
+        YZZQLB ,
+        YZLVLX ,
+        YZPMJE ,
+        YZZJZH ,
+        YZJYLX ,
+        YZJJJE ,
+        YZSHLX ,
+        YZCJSL ,
+        YZFSXF ,
+        YZFGHF ,
+        YZFYHF ,
+        YZGLFN ,
+        YZJUSR ,
+        YZSUSR ,
+        YZSTAT
+        from
+          TEMP_YHJZQ
+        where
+            YZDATE = str_to_date(#{ywdate},'%Y-%m-%d')
+            and
+            YZCPDM = 'Z00295'
+    </select>
+
+    <delete id="deleteBankRepo" parameterType="java.lang.String">
+        delete from YHJHG
+        where HGDATE = str_to_date(#{pullDate},'%Y-%m-%d')
+         and HGCPDM = 'Z00295'
+    </delete>
+
+    <insert id="saveBankRepo" parameterType="com.yss.newexport.Entity.BankRepoReportVO">
+        insert into YHJHG
+        (
+        HGCPDM,HGCODE,
+        HGCJBH,HGDATE,
+        HGSTRD,HGENDD,
+        HGJSJG,HGJXTS,
+        HGHGFS,HGHGFX,
+        HGCJJE,HGFKJE,
+        HGHGLV,HGFSXF,
+        HGFGHF,HGFYHF,
+        HGZJZH,HGGLFN,
+        HGJUSR,HGSUSR,
+        HGSTAT
+        )VALUES
+        <foreach collection="bankrepolist" index="index" item="item" separator=",">
+          (
+            #{item.hgcpdm},
+            #{item.hgcode},
+            #{item.hgcjbh},
+            <choose>
+                <when test="item.hgdate != null and item.hgdate !=''">
+                    str_to_date(#{item.hgdate},'%Y-%m-%d'),
+                </when>
+                <otherwise>
+                    #{item.hgdate},
+                </otherwise>
+            </choose>
+
+            <choose>
+                <when test="item.hgstrd != null and item.hgstrd !=''">
+                    str_to_date(#{item.hgstrd},'%Y-%m-%d'),
+                </when>
+                <otherwise>
+                    #{item.hgstrd},
+                </otherwise>
+            </choose>
+
+            <choose>
+                <when test="item.hgendd != null and item.hgendd !=''">
+                    str_to_date(#{item.hgendd},'%Y-%m-%d'),
+                </when>
+                <otherwise>
+                    #{item.hgendd},
+                </otherwise>
+            </choose>
+            #{item.hgjsjg},
+            #{item.hgjxts},
+            #{item.hghgfs},
+            #{item.hghgfx},
+            #{item.hgcjje},
+            #{item.hgfkje},
+            #{item.hghglv},
+            #{item.hgfsxf},
+            #{item.hgfghf},
+            #{item.hgfyhf},
+            #{item.hgzjzh},
+            #{item.hgglfn},
+            #{item.hgjusr},
+            #{item.hgsusr},
+            #{item.hgstat}
+          )
+        </foreach>
+    </insert>
+
+    <select id="queryTempBankRepo" parameterType="java.lang.String"
+            resultType="com.yss.newexport.Entity.BankRepoReportVO">
+        SELECT
+        HGCPDM,
+        HGCODE,
+        HGCJBH,
+        date_format(HGDATE,'%Y-%m-%d') as HGDATE,
+        date_format(HGSTRD,'%Y-%m-%d') as HGSTRD,
+        date_format(HGENDD,'%Y-%m-%d') as HGENDD,
+        HGJSJG,
+        HGJXTS,
+        HGHGFS,
+        HGHGFX,
+        HGCJJE,
+        HGFKJE,
+        HGHGLV,
+        HGFSXF,
+        HGFGHF,
+        HGFYHF,
+        HGZJZH,
+        HGGLFN,
+        HGJUSR,
+        HGSUSR,
+        HGSTAT
+        from
+           TEMP_YHJHG
+        where
+            HGDATE = str_to_date(#{ywdate},'%Y-%m-%d')
+            and
+            HGCPDM = 'Z00295'
+    </select>
+</mapper>

@@ -1,0 +1,113 @@
+[
+  {
+    "title": "系统设置",
+    "root": {
+      "children": [
+        {
+          "text": "数据源设置",
+          "leaf": true,
+          "url": "Dbconfig"
+        },
+        {
+          "text": "导出路径设置",
+          "leaf": true,
+          "url": "ExportPath"
+        },
+        {
+          "text": "科目代码映射",
+          "leaf": true,
+          "url": "KmMapping"
+        },
+        {
+          "text": "数据字典映射",
+          "leaf": true,
+          "url": "Dictionary"
+        }
+      ]
+    }
+  },
+  {
+    "title": "数据处理",
+    "root": {
+      "children": [
+        {
+          "text": "数据处理",
+          "leaf": true,
+          "url": "DataCollection"
+        }
+      ]
+    }
+  },
+  {
+    "title": "数据浏览",
+    "root": {
+      "children": [
+        {
+          "text": "凭证表",
+          "leaf": true,
+          "url": "PzExport"
+        },
+        {
+          "text": "估值表",
+          "leaf": true,
+          "url": "GzExport"
+        },
+        {
+          "text": "科目表",
+          "leaf": true,
+          "url": "KmExport"
+        },
+        {
+          "text": "科目余额表",
+          "leaf": true,
+          "url": "KmyeExport"
+        },
+        {
+          "text": "银行存款业务表",
+          "leaf": true,
+          "url": "YhckywExport"
+        },
+        {
+          "text": "基金业务表",
+          "leaf": true,
+          "url": "JjywExport"
+        },
+        {
+          "text": "银行间回购信息表",
+          "leaf": true,
+          "url": "YhjhgExport"
+        },
+        {
+          "text": "银行间债券信息表",
+          "leaf": true,
+          "url": "YhjzqExport"
+        },
+        {
+          "text": "交易所清算表",
+          "leaf": true,
+          "url": "JysqsExport"
+        },
+       /* {
+          "text": "期货台账表",
+          "leaf": true,
+          "url": "QhtzExport"
+        },
+        {
+          "text": "期权台账表",
+          "leaf": true,
+          "url": "QqtzExport"
+        },
+        {
+          "text": "非标定义信息表",
+          "leaf": true,
+          "url": "FbdyExport"
+        },*/
+        {
+          "text": "投资组合信息表",
+          "leaf": true,
+          "url": "TzzhExport"
+        }
+      ]
+    }
+  }
+]
